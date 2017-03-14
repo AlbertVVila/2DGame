@@ -84,7 +84,7 @@ bool TileMap::loadLevel(const string &levelFile)
 		{
 			fin.getline(tile, 256, ',');
 			if (strcmp(tile, "-1") == 0)
-				map[j*mapSize.x + i] = 0;
+				map[j*mapSize.x + i] = -1;
 			else{
 			map[j*mapSize.x + i] = stoi(tile);
 		}
@@ -106,12 +106,12 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 	vector<float> vertices;
 	
 	halfTexel = glm::vec2(0.5f / tilesheet.width(), 0.5f / tilesheet.height());
-	for(int j=mapSize.y; j>-1; j--)
+	for(int j=mapSize.y-1; j>-1; j--)
 	{
 		for(int i=0; i<mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if(tile != 0)
+			if(tile != -1)
 			{
 				// Non-empty tile
 				nTiles++;

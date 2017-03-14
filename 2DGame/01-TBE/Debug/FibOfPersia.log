@@ -1,0 +1,24 @@
+﻿Compilación iniciada a las 12/03/2017 19:48:29.
+     1>Proyecto "C:\Users\usuario\Desktop\Videojocs\ExOpenGL3\2DGame\01-TBE\FibOfPersia.vcxproj" en el nodo 2 (Build destinos).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "01-tbe\Game.cpp" "01-tbe\main.cpp" "01-tbe\Scene.cpp" "01-tbe\Shader.cpp" "01-tbe\ShaderProgram.cpp" "01-tbe\Texture.cpp" "01-tbe\TileMap.cpp"
+         TileMap.cpp
+     1>c:\users\usuario\desktop\videojocs\exopengl3\2dgame\01-tbe\01-tbe\TileMap.h(5): fatal error C1083: No se puede abrir el archivo incluir: 'glm/glm.hpp': No such file or directory
+         Texture.cpp
+     1>01-tbe\Texture.cpp(1): fatal error C1083: No se puede abrir el archivo incluir: 'SOIL.h': No such file or directory
+         ShaderProgram.cpp
+     1>01-tbe\ShaderProgram.cpp(1): fatal error C1083: No se puede abrir el archivo incluir: 'glm/gtc/type_ptr.hpp': No such file or directory
+         Shader.cpp
+     1>c:\users\usuario\desktop\videojocs\exopengl3\2dgame\01-tbe\01-tbe\Shader.h(6): fatal error C1083: No se puede abrir el archivo incluir: 'GL/glew.h': No such file or directory
+         Scene.cpp
+     1>01-tbe\Scene.cpp(3): fatal error C1083: No se puede abrir el archivo incluir: 'glm/gtc/matrix_transform.hpp': No such file or directory
+         main.cpp
+     1>01-tbe\main.cpp(1): fatal error C1083: No se puede abrir el archivo incluir: 'GL/glew.h': No such file or directory
+         Game.cpp
+     1>01-tbe\Game.cpp(1): fatal error C1083: No se puede abrir el archivo incluir: 'GL/glew.h': No such file or directory
+         Generando código...
+     1>Compilación del proyecto terminada "C:\Users\usuario\Desktop\Videojocs\ExOpenGL3\2DGame\01-TBE\FibOfPersia.vcxproj" (Build destinos) -- ERROR.
+
+ERROR al compilar.
+
+Tiempo transcurrido 00:00:01.71

@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!POPAssets/
+!README.md
+!LevelAlbert/
+!LevelDavid/
+!2DGame/01-TBE/01-TBE/images
+!2DGame/01-TBE/01-TBE/levels
+!*.cpp
+!*.h
+
+# ...even if they are in subdirectories
+!*/

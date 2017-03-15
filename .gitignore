@@ -1,6 +1,5 @@
 # Ignore everything
 *
-libs
 
 # But not these files...
 !.gitignore

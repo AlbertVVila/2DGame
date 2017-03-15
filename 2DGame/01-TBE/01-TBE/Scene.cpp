@@ -3,12 +3,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 
+#define SCREEN_X 32
+#define SCREEN_Y 16
+
+#define INIT_PLAYER_X_TILES 5
+#define INIT_PLAYER_Y_TILES 5
 
 Scene::Scene()
 {
 	background = NULL;
 	ground_wall = NULL;
 	other_column_back = NULL;
+	player = NULL;
 }
 
 Scene::~Scene()
@@ -19,6 +25,8 @@ Scene::~Scene()
 		delete ground_wall;
 	if (other_column_back != NULL)
 		delete other_column_back;
+	if (player != NULL)
+		delete player;
 }
 
 
@@ -28,6 +36,10 @@ void Scene::init()
 	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(0, 0), texProgram);
 	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(0, 0), texProgram);
 	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(0, 0), texProgram);
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
+	player->setTileMap(ground_wall);
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -35,6 +47,7 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	player->update(deltaTime);
 }
 
 void Scene::render()
@@ -49,6 +62,7 @@ void Scene::render()
 	background->render();
 	ground_wall->render();
 	other_column_back->render();
+	player->render();
 }
 
 void Scene::initShaders()

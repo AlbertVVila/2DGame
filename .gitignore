@@ -5,10 +5,10 @@
 !.gitignore
 !POPAssets/
 !README.md
-!LevelAlbert/
-!LevelDavid/
-!2DGame/01-TBE/01-TBE/images/
-!2DGame/01-TBE/01-TBE/levels/
+!LevelAlbert/*
+!LevelDavid/*
+!2DGame/01-TBE/01-TBE/images/*
+!2DGame/01-TBE/01-TBE/levels/*
 !2DGame/01-TBE/01-TBE/*.cpp
 !2DGame/01-TBE/01-TBE/*.h
 

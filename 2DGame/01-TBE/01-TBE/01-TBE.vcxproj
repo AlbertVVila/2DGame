@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="F:\windows\Videojocs\ExOpenGL3\2DGame\02-Bubble\02-Bubble\Player.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -20,6 +21,7 @@
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="F:\windows\Videojocs\ExOpenGL3\2DGame\02-Bubble\02-Bubble\Player.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />

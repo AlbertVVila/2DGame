@@ -3,11 +3,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 
-#define SCREEN_X 32
-#define SCREEN_Y 16
+#define SCREEN_X 0
+#define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 5
-#define INIT_PLAYER_Y_TILES 5
+#define INIT_PLAYER_X_TILES 18
+#define INIT_PLAYER_Y_TILES 0
 
 Scene::Scene()
 {
@@ -33,11 +33,11 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(0, 0), texProgram);
-	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(0, 0), texProgram);
-	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(0, 0), texProgram);
+	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); //abans era screenx , screeny
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);

@@ -7,8 +7,8 @@
 #include "TileMap.h"
 #include "Player.h"
 
-#define CAMERA_WIDTH 65*32	
-#define CAMERA_HEIGHT 12*64
+#define CAMERA_WIDTH 60*32	
+#define CAMERA_HEIGHT 10*64
 
 
 // Scene contains all the entities of our game.

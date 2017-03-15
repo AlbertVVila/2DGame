@@ -13,4 +13,3 @@
 !2DGame/01-TBE/01-TBE/*.h
 
 # ...even if they are in subdirectories
-!*/

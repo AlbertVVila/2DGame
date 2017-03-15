@@ -59,6 +59,7 @@ void Scene::render()
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
 	ground_wall->render();
 	other_column_back->render();

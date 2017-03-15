@@ -6,20 +6,28 @@
 
 Scene::Scene()
 {
-	map = NULL;
+	background = NULL;
+	ground_wall = NULL;
+	other_column_back = NULL;
 }
 
 Scene::~Scene()
 {
-	if(map != NULL)
-		delete map;
+	if(background != NULL)
+		delete background;
+	if (ground_wall != NULL)
+		delete ground_wall;
+	if (other_column_back != NULL)
+		delete other_column_back;
 }
 
 
 void Scene::init()
 {
 	initShaders();
-	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(0, 0), texProgram);
+	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(0, 0), texProgram);
+	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(0, 0), texProgram);
+	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(0, 0), texProgram);
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -38,7 +46,9 @@ void Scene::render()
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
-	map->render();
+	background->render();
+	ground_wall->render();
+	other_column_back->render();
 }
 
 void Scene::initShaders()

@@ -25,6 +25,8 @@ bool Texture::loadFromFile(const string &filename, PixelFormat format)
 		break;
 	case TEXTURE_PIXEL_FORMAT_RGBA:
 		image = SOIL_load_image(filename.c_str(), &widthTex, &heightTex, 0, SOIL_LOAD_RGBA);
+		string res = "";
+		res =SOIL_last_result();
 		break;
 	}
 	if(image == NULL)

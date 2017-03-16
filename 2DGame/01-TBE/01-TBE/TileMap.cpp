@@ -115,7 +115,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 			{
 				// Non-empty tile
 				nTiles++;
-				posTile = glm::vec2(minCoords.x + i * tileSizeWidth,  j * tileSizeHeight +minCoords.y-64);
+				posTile = glm::vec2(minCoords.x + i * tileSizeWidth,  (j-1) * tileSizeHeight +minCoords.y);
 				texCoordTile[0] = glm::vec2(float((tile)%tilesheetSize.x) / tilesheetSize.x, float((tile)/tilesheetSize.x) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				//texCoordTile[0] += halfTexel;
@@ -195,9 +195,9 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	{
 		if (map[y*mapSize.x + x] != -1)
 		{
-			if (*posY - tileSizeHeight * y + size.y <= 4)
+			if (abs(*posY - tileSizeHeight * y- (3*tileSizeHeight/4) + size.y) <= 4)
 			{
-				*posY = tileSizeHeight * y - size.y;
+				*posY = tileSizeHeight * y + 3*tileSizeHeight/4 - size.y;
 				return true;
 			}
 		}

@@ -7,7 +7,7 @@
 #define SCREEN_Y 0
 
 #define INIT_PLAYER_X_TILES 18
-#define INIT_PLAYER_Y_TILES 0
+#define INIT_PLAYER_Y_TILES 1
 
 Scene::Scene()
 {
@@ -37,7 +37,7 @@ void Scene::init()
 	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); //abans era screenx , screeny
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);

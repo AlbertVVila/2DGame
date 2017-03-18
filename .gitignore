@@ -24,6 +24,8 @@ libs
 
 !2DGame/01-TBE/01-TBE/images
 
+!2DGame/01-TBE/01-TBE/shaders
+
 !2DGame/01-TBE/01-TBE/levels
 
 !2DGame/01-TBE/01-TBE/*.cpp

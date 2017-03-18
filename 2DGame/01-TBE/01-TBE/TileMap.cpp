@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <glm/gtc/matrix_transform.hpp>
 #include "TileMap.h"
 
 
@@ -20,6 +21,7 @@ TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProg
 {
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
+	shaderProgram = &program;
 }
 
 TileMap::~TileMap()
@@ -31,6 +33,9 @@ TileMap::~TileMap()
 
 void TileMap::render() const
 {
+	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
+	shaderProgram->setUniformMatrix4f("modelview", modelview);
+	shaderProgram->setUniform2f("texCoordDispl", 0, 0);
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
 	glBindVertexArray(vao);

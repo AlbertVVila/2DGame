@@ -67,8 +67,8 @@ void Scene::render()
 	background->render();
 	ground_wall->render();
 	other_column_back->render();
-	other_column_front->render();
 	player->render();
+	other_column_front->render();
 }
 
 void Scene::initShaders()

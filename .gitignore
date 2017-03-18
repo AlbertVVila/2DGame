@@ -3,13 +3,19 @@
 
 # But not these files...
 !.gitignore
-!POPAssets/
-!README.md
-!LevelAlbert/*
-!LevelDavid/*
-!2DGame/01-TBE/01-TBE/images/*
-!2DGame/01-TBE/01-TBE/levels/*
+!/POPAssets/
+!/README.md
+!/LevelAlbert/*
+!/LevelDavid/*
+/2DGame/*
+!/2DGame/01-TBE
+/2DGame/01-TBE/*
+!/2DGame/01-TBE/01-TBE
+/2DGame/01-TBE/01-TBE/*
+!2DGame/01-TBE/01-TBE/images
+!2DGame/01-TBE/01-TBE/levels
 !2DGame/01-TBE/01-TBE/*.cpp
 !2DGame/01-TBE/01-TBE/*.h
+
 
 # ...even if they are in subdirectories

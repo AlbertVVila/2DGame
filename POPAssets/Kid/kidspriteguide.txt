@@ -1,0 +1,2 @@
+kidrun : casi 2 files (15 elements)
+kidturn : fila 2 i 3 (8 elements)

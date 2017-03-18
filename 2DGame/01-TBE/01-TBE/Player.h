@@ -4,7 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-
+#include <string.h>
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
@@ -23,6 +23,7 @@ public:
 
 private:
 	bool bJumping;
+	string direction;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;

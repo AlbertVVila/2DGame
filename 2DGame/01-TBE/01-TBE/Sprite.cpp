@@ -31,6 +31,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	texture = spritesheet;
 	shaderProgram = program;
 	currentAnimation = -1;
+	finished = true;
 	position = glm::vec2(0.f);
 }
 
@@ -43,9 +44,15 @@ void Sprite::update(int deltaTime)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
+			finished = currentKeyframe == animations[currentAnimation].keyframeDispl.size() - 1;
+
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
+}
+
+bool Sprite::animFinished(){
+	return finished;
 }
 
 void Sprite::render() const
@@ -91,6 +98,7 @@ void Sprite::changeAnimation(int animId)
 	{
 		currentAnimation = animId;
 		currentKeyframe = 0;
+		finished = false;
 		timeAnimation = 0.f;
 		texCoordDispl = animations[animId].keyframeDispl[0];
 	}

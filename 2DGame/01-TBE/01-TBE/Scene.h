@@ -30,7 +30,7 @@ private:
 	void initShaders();
 
 private:
-	TileMap *background, *ground_wall, *other_column_back;
+	TileMap *background, *ground_wall, *other_column_back, *other_column_front;
 	Player *player;
 	ShaderProgram texProgram;
 	float currentTime;

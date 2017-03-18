@@ -15,6 +15,7 @@ Scene::Scene()
 	ground_wall = NULL;
 	other_column_back = NULL;
 	player = NULL;
+	other_column_front = NULL;
 }
 
 Scene::~Scene()
@@ -27,6 +28,8 @@ Scene::~Scene()
 		delete other_column_back;
 	if (player != NULL)
 		delete player;
+	if (other_column_front != NULL)
+		delete other_column_front;
 }
 
 
@@ -36,6 +39,7 @@ void Scene::init()
 	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_front = TileMap::createTileMap("levels/level1_4.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
@@ -63,6 +67,7 @@ void Scene::render()
 	background->render();
 	ground_wall->render();
 	other_column_back->render();
+	other_column_front->render();
 	player->render();
 }
 

@@ -13,7 +13,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT
+	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT, SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT
 };
 
 
@@ -54,20 +54,25 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STANDRL, glm::vec2(0.2f, 0.1f));
 
 	sprite->setAnimationSpeed(START_LEFT, 8);
+	sprite->setAnimationSpeed(START_LEFT, 8);
+
+	sprite->setAnimationSpeed(START_LEFT, 8);
 	sprite->addKeyframe(START_LEFT, glm::vec2(0.1f, 0.f));
 	sprite->addKeyframe(START_LEFT, glm::vec2(0.2f, 0.f));
 	sprite->addKeyframe(START_LEFT, glm::vec2(0.3f, 0.f));
 	sprite->addKeyframe(START_LEFT, glm::vec2(0.4f, 0.f));
+	sprite->addKeyframe(START_LEFT, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(START_LEFT, glm::vec2(0.6f, 0.f));
 
 	sprite->setAnimationSpeed(START_RIGHT, 8);
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.2f, 0.f));
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.3f, 0.f));
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.4f, 0.f));
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.5f, 0.f));
+	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.6f, 0.f));
+	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.7f, 0.f));
 
 	sprite->setAnimationSpeed(MOVE_LEFT, 8);
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.f));
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.6f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.7f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.8f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.9f, 0.f));
@@ -78,8 +83,6 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.4f, 0.05f));
 
 	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.6f, 0.f));
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.7f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.8f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.9f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-1.f, 0.f));

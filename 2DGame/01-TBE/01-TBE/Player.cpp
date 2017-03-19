@@ -13,7 +13,7 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT, SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT
+	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,/**SLOW_LEFT,SLOW_RIGHT,**/START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT
 };
 
 
@@ -53,8 +53,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STANDRL, glm::vec2(0.1f, 0.1f));
 	sprite->addKeyframe(STANDRL, glm::vec2(0.2f, 0.1f));
 
-	sprite->setAnimationSpeed(START_LEFT, 8);
-	sprite->setAnimationSpeed(START_LEFT, 8);
+	//sprite->setAnimationSpeed(START_LEFT, 8);
+	//sprite->setAnimationSpeed(START_LEFT, 8);
 
 	sprite->setAnimationSpeed(START_LEFT, 8);
 	sprite->addKeyframe(START_LEFT, glm::vec2(0.1f, 0.f));
@@ -148,11 +148,11 @@ void Player::update(int deltaTime)
 		else if (sprite->animation() == START_LEFT && sprite->animFinished())
 			sprite->changeAnimation(MOVE_LEFT);
 
-		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 64)))
+	/*	if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 64)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
-		}
+		}*/
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
@@ -168,11 +168,11 @@ void Player::update(int deltaTime)
 		else if (sprite->animation() == START_RIGHT && sprite->animFinished())
 			sprite->changeAnimation(MOVE_RIGHT);
 
-			if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
+		/*	if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
 			{
 				posPlayer.x -= 2;
 				sprite->changeAnimation(STAND_RIGHT);
-			}
+			}*/
 	}
 	else if (sprite->animFinished()) // ni left ni right apretat
 	{

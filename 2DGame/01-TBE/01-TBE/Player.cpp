@@ -174,6 +174,18 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(SLOW_RIGHT);
 	}
 
+	if (sprite->animation()!=STAND_LEFT && direction=="left" && map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64)))
+	{
+		bRunning = false;
+		sprite->changeAnimation(STAND_LEFT);
+	}
+
+	if (sprite->animation() != STAND_RIGHT && direction == "right" && map->collisionMoveRight(posPlayer, glm::ivec2(64, 64)))
+	{
+		bRunning = false;
+		sprite->changeAnimation(STAND_RIGHT);
+	}
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if (direction != "left" && sprite->animFinished() && !bRunning){
@@ -187,14 +199,6 @@ void Player::update(int deltaTime)
 
 		else if (sprite->animation() == START_LEFT && sprite->animFinished())
 			sprite->changeAnimation(MOVE_LEFT);
-
-		if (bRunning && map->collisionMoveLeft(posPlayer, glm::ivec2(32, 64)))
-		{
-			//posPlayer.x += 2;
-			bRunning = false;
-			sprite->changeAnimation(STAND_LEFT);
-		}
-
 	
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
@@ -211,12 +215,6 @@ void Player::update(int deltaTime)
 		else if (sprite->animation() == START_RIGHT && sprite->animFinished())
 			sprite->changeAnimation(MOVE_RIGHT);
 
-		if (bRunning && map->collisionMoveRight(posPlayer, glm::ivec2(32, 64)))
-		{
-			//posPlayer.x += 2;
-			bRunning = false;
-			sprite->changeAnimation(STAND_RIGHT);
-		}
 	}
 	else if (sprite->animFinished()) // ni left ni right apretat
 	{

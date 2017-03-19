@@ -174,17 +174,6 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(SLOW_RIGHT);
 	}
 
-	if (sprite->animation()!=STAND_LEFT && direction=="left" && map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64)))
-	{
-		bRunning = false;
-		sprite->changeAnimation(STAND_LEFT);
-	}
-
-	if (sprite->animation() != STAND_RIGHT && direction == "right" && map->collisionMoveRight(posPlayer, glm::ivec2(64, 64)))
-	{
-		bRunning = false;
-		sprite->changeAnimation(STAND_RIGHT);
-	}
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
@@ -259,6 +248,17 @@ void Player::update(int deltaTime)
 				startY = posPlayer.y;
 			}**/
 		}
+	}
+	if (sprite->animation() != STAND_LEFT && direction == "left" && map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64)))
+	{
+		bRunning = false;
+		sprite->changeAnimation(STAND_LEFT);
+	}
+
+	if (sprite->animation() != STAND_RIGHT && direction == "right" && map->collisionMoveRight(posPlayer, glm::ivec2(64, 64)))
+	{
+		bRunning = false;
+		sprite->changeAnimation(STAND_RIGHT);
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));

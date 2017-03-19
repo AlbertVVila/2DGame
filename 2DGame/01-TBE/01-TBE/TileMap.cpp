@@ -163,7 +163,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 
 	x = pos.x /tileSizeWidth;
 	y0 = round((double)pos.y / (double)tileSizeHeight) ;
-		if (map[y0*mapSize.x + x] < 20){ // el problema es que nomes miro la pared just a l'esquerre
+	if (map[y0*mapSize.x + x] < 20 && map[y0*mapSize.x + x] != -1){ // el problema es que nomes miro la pared just a l'esquerre
 			if (tileSizeWidth * x+20 > pos.x) 
 				return true;
 		}
@@ -176,7 +176,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 
 	x = (pos.x + size.x - 1) / tileSizeWidth;
 	y0 = round((double)pos.y / (double)tileSizeHeight);
-	if (map[y0*mapSize.x + x] < 20){
+	if (map[y0*mapSize.x + x] < 20 && map[y0*mapSize.x + x] != -1){
 		if (tileSizeWidth*x - 40 < pos.x)
 			return true;
 	}

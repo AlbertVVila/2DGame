@@ -2,3 +2,4 @@ kidrun : casi 2 files (15 elements)
 kidturn : fila 2 i 3 (8 elements)
 kidstop : fila 3 (4 elements)
 - bug correr en una direcció i canviar de sentit mentre es corra.
+kidslow: fila3+4 (12 elements)

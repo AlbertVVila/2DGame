@@ -6,8 +6,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 10
-#define INIT_PLAYER_Y_TILES 0
+#define INIT_PLAYER_X_TILES 4
+#define INIT_PLAYER_Y_TILES 7
 
 #define NUM_TORCHS 4
 

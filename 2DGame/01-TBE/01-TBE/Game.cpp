@@ -67,6 +67,10 @@ bool Game::getSpecialKey(int key) const
 	return specialKeys[key];
 }
 
+int Game::getModifiers() const{
+	return glutGetModifiers();
+}
+
 
 
 

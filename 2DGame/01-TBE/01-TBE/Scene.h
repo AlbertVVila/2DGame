@@ -6,6 +6,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Torch.h"
 
 #define CAMERA_WIDTH 60*32	
 #define CAMERA_HEIGHT 12*64
@@ -32,6 +33,7 @@ private:
 private:
 	TileMap *background, *ground_wall, *other_column_back, *other_column_front;
 	Player *player;
+	Torch *torchs;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

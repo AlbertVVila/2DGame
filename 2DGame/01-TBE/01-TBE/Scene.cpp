@@ -9,11 +9,14 @@
 #define INIT_PLAYER_X_TILES 10
 #define INIT_PLAYER_Y_TILES 0
 
+#define NUM_TORCHS 4
+
 Scene::Scene()
 {
 	background = NULL;
 	ground_wall = NULL;
 	other_column_back = NULL;
+	torchs = NULL;
 	player = NULL;
 	other_column_front = NULL;
 }
@@ -26,6 +29,8 @@ Scene::~Scene()
 		delete ground_wall;
 	if (other_column_back != NULL)
 		delete other_column_back;
+	if (torchs != NULL)
+		delete torchs;
 	if (player != NULL)
 		delete player;
 	if (other_column_front != NULL)
@@ -40,10 +45,21 @@ void Scene::init()
 	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	other_column_front = TileMap::createTileMap("levels/level1_4.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+
+	torchs = new Torch[NUM_TORCHS];
+	for (int i = 0; i < NUM_TORCHS; i++){
+		torchs[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
+	torchs[0].setPosition(glm::vec2(75, -43));
+	torchs[1].setPosition(glm::vec2(235, 21));
+	torchs[2].setPosition(glm::vec2(427, 21));
+	torchs[3].setPosition(glm::vec2(75, 213));
+
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
+
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -52,6 +68,9 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	for (int i = 0; i < NUM_TORCHS; i++){
+		torchs[i].update(deltaTime);
+	}
 }
 
 void Scene::render()
@@ -67,6 +86,9 @@ void Scene::render()
 	background->render();
 	ground_wall->render();
 	other_column_back->render();
+	for (int i = 0; i < NUM_TORCHS; i++){
+		torchs[i].render();
+	}
 	player->render();
 	other_column_front->render();
 }

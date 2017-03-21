@@ -1,15 +1,15 @@
-#ifndef _SPIKES_INCLUDE
-#define _SPIKES_INCLUDE
+#ifndef _DOOR_INCLUDE
+#define _DOOR_INCLUDE
 
 
 #include "Sprite.h"
 #include "TileMap.h"
 #include <string.h>
 
-// Spikes represents a trap where the player dies
+// Door represents the door that gets openen and closed with buttons
 
 
-class Spikes
+class Door
 {
 
 public:
@@ -21,11 +21,11 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 private:
-	glm::ivec2 tileMapDispl, posSpikes;
+	glm::ivec2 tileMapDispl, posDoor;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
 };
 
 
-#endif // _SPIKES_INCLUDE
+#endif // _DOOR_INCLUDE

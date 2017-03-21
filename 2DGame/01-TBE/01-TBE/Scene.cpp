@@ -12,6 +12,7 @@
 #define NUM_TORCHS 4
 #define NUM_FALLINGS 1
 #define NUM_SPIKES 1
+#define NUM_DOORS 1
 
 Scene::Scene()
 {
@@ -21,6 +22,7 @@ Scene::Scene()
 	torchs = NULL;
 	fallings = NULL;
 	spikes = NULL;
+	doors = NULL;
 	player = NULL;
 	other_column_front = NULL;
 }
@@ -39,6 +41,8 @@ Scene::~Scene()
 		delete fallings;
 	if (spikes != NULL)
 		delete spikes;
+	if (doors != NULL)
+		delete doors;
 	if (player != NULL)
 		delete player;
 	if (other_column_front != NULL)
@@ -75,6 +79,11 @@ void Scene::init()
 		spikes[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	spikes[0].setPosition(glm::vec2(576, 576));
 
+	doors = new Door[NUM_DOORS];
+	for (int i = 0; i < NUM_DOORS; i++)
+		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	doors[0].setPosition(glm::vec2(448, 64));
+
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
@@ -94,6 +103,8 @@ void Scene::update(int deltaTime)
 		fallings[i].update(deltaTime);
 	for (int i = 0; i < NUM_SPIKES; i++)
 		spikes[i].update(deltaTime);
+	for (int i = 0; i < NUM_DOORS; i++)
+		doors[i].update(deltaTime);
 }
 
 void Scene::render()
@@ -115,6 +126,8 @@ void Scene::render()
 		fallings[i].render();
 	for (int i = 0; i < NUM_SPIKES; i++)
 		spikes[i].render();
+	for (int i = 0; i < NUM_DOORS; i++)
+		doors[i].render();
 	player->render();
 	other_column_front->render();
 }

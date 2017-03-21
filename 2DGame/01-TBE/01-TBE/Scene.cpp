@@ -10,6 +10,7 @@
 #define INIT_PLAYER_Y_TILES 0
 
 #define NUM_TORCHS 4
+#define NUM_FALLINGS 1
 
 Scene::Scene()
 {
@@ -17,6 +18,7 @@ Scene::Scene()
 	ground_wall = NULL;
 	other_column_back = NULL;
 	torchs = NULL;
+	fallings = NULL;
 	player = NULL;
 	other_column_front = NULL;
 }
@@ -31,6 +33,8 @@ Scene::~Scene()
 		delete other_column_back;
 	if (torchs != NULL)
 		delete torchs;
+	if (fallings != NULL)
+		delete fallings;
 	if (player != NULL)
 		delete player;
 	if (other_column_front != NULL)
@@ -47,13 +51,20 @@ void Scene::init()
 	other_column_front = TileMap::createTileMap("levels/level1_4.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	torchs = new Torch[NUM_TORCHS];
-	for (int i = 0; i < NUM_TORCHS; i++){
+	for (int i = 0; i < NUM_TORCHS; i++)
 		torchs[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	}
 	torchs[0].setPosition(glm::vec2(75, -43));
 	torchs[1].setPosition(glm::vec2(235, 21));
 	torchs[2].setPosition(glm::vec2(427, 21));
 	torchs[3].setPosition(glm::vec2(75, 213));
+
+	fallings = new Falling[NUM_FALLINGS];
+	for (int i = 0; i < NUM_FALLINGS; i++)
+	{
+		fallings[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		fallings[i].setTileMap(ground_wall);
+	}
+	fallings[0].setPosition(glm::vec2(224, 64));
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
@@ -68,9 +79,10 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
-	for (int i = 0; i < NUM_TORCHS; i++){
+	for (int i = 0; i < NUM_TORCHS; i++)
 		torchs[i].update(deltaTime);
-	}
+	for (int i = 0; i < NUM_FALLINGS; i++)
+		fallings[i].update(deltaTime);
 }
 
 void Scene::render()
@@ -86,9 +98,10 @@ void Scene::render()
 	background->render();
 	ground_wall->render();
 	other_column_back->render();
-	for (int i = 0; i < NUM_TORCHS; i++){
+	for (int i = 0; i < NUM_TORCHS; i++)
 		torchs[i].render();
-	}
+	for (int i = 0; i < NUM_FALLINGS; i++)
+		fallings[i].render();
 	player->render();
 	other_column_front->render();
 }

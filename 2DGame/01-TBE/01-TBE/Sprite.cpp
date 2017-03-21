@@ -44,9 +44,8 @@ void Sprite::update(int deltaTime)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
-			finished = currentKeyframe == animations[currentAnimation].keyframeDispl.size() - 1;
-
 		}
+		finished = currentKeyframe == animations[currentAnimation].keyframeDispl.size() - 1;
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
 }
@@ -102,6 +101,10 @@ void Sprite::changeAnimation(int animId)
 		timeAnimation = 0.f;
 		texCoordDispl = animations[animId].keyframeDispl[0];
 	}
+}
+
+int Sprite::getFrame() const{
+	return currentKeyframe;
 }
 
 int Sprite::animation() const

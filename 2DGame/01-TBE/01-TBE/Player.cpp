@@ -6,14 +6,14 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
+#define JUMP_ANGLE_STEP 1
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT
+	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, JUMP_LEFT, JUMP_RIGHT
 };
 
 
@@ -25,7 +25,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(12);
+	sprite->setNumberAnimations(14);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -130,6 +130,37 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STOP_RIGHT, glm::vec2(-0.6f, 0.1f));
 	sprite->addKeyframe(STOP_RIGHT, glm::vec2(-0.7f, 0.1f));
 
+	sprite->setAnimationSpeed(JUMP_LEFT, 8);
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.9f, 0.15f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.1f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.2f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.3f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.4f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.5f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.6f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.7f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.8f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.9f, 0.2f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.1f, 0.25f));
+
+	sprite->setAnimationSpeed(JUMP_RIGHT, 8);
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-1.f, 0.15f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.1f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.2f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.3f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.4f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.5f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.6f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.7f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.8f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.9f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-1.f, 0.2f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.1f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.2f, 0.25f));
+
+	//aquí ficaré el jump_fail que es en el cas que no faci el salt i falli i després hi haurà jump_catch i jump_succeed
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x+posPlayer.x), float(tileMapDispl.y+posPlayer.y)));
@@ -163,6 +194,11 @@ void Player::update(int deltaTime)
 		break;
 	case SLOW_RIGHT:
 		posPlayer.x += 1;
+		break;
+	case JUMP_LEFT:
+	case JUMP_RIGHT:
+		int frame = sprite->getFrame();
+		if (frame>9)posPlayer.y--;
 		break;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(112)){ //SHIFT
@@ -205,7 +241,17 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_RIGHT);
 
 	}
-	else if (sprite->animFinished()) // ni left ni right apretat
+	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)){
+		if (sprite->animFinished() && !bRunning && direction=="left"){ 
+			sprite->changeAnimation(JUMP_LEFT);
+			bJumping = true;
+		}
+		else if (sprite->animFinished() && !bRunning && direction == "right"){ 
+			sprite->changeAnimation(JUMP_RIGHT);
+			bJumping = true;
+		}
+	}
+	else if (sprite->animFinished() && !bJumping) // ni left ni right apretat
 	{
 		if (!bRunning && direction == "left")
 			sprite->changeAnimation(STAND_LEFT);
@@ -220,10 +266,11 @@ void Player::update(int deltaTime)
 			bRunning = false;
 		}
 	}
-
-	if (bJumping)
+	
+	if (bJumping && sprite->animFinished())
 	{
-		jumpAngle += JUMP_ANGLE_STEP;
+		bJumping = false;
+		/**jumpAngle += JUMP_ANGLE_STEP;
 		if (jumpAngle == 180)
 		{
 			bJumping = false;
@@ -231,19 +278,20 @@ void Player::update(int deltaTime)
 		}
 		else
 		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
+			posPlayer.y = int(startY - 50 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
 				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y);
-		}
+		}**/
 	}
-	else
+	else if (!bJumping)
 	{
 		posPlayer.y += FALL_STEP;
 		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)) // hauria de ser 64x64
 		{
-		/**	if (Game::instance().getSpecialKey(GLUT_KEY_UP))
+			/**if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
+				sprite->changeAnimation(JUMP_LEFT);
 				jumpAngle = 0;
 				startY = posPlayer.y;
 			}**/

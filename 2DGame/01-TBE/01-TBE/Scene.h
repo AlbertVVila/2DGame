@@ -10,6 +10,7 @@
 #include "Falling.h"
 #include "Spikes.h"
 #include "Door.h"
+#include "Button.h"
 
 #define CAMERA_WIDTH 60*32	
 #define CAMERA_HEIGHT 12*64
@@ -40,6 +41,7 @@ private:
 	Falling *fallings;
 	Spikes *spikes;
 	Door *doors;
+	Button *buttons;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

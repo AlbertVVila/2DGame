@@ -5,6 +5,8 @@
 #include "Door.h"
 #include "Game.h"
 
+#define TIME_OPENED 5000
+
 enum DoorAnims
 {
 	DOWN, UP, GOUP, GODOWN
@@ -54,13 +56,17 @@ void Door::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
-	if (sprite->animation() == DOWN && Game::instance().getSpecialKey(GLUT_KEY_F3))
-		sprite->changeAnimation(GOUP);
-	if (sprite->animation() == UP && Game::instance().getSpecialKey(GLUT_KEY_F4))
-		sprite->changeAnimation(GODOWN);
-
 	if (sprite->animation() == GOUP && sprite->animFinished())
+	{
 		sprite->changeAnimation(UP);
+		opened = 0;
+	}
+	if (sprite->animation() == UP)
+	{
+		opened += deltaTime;
+		if (opened >= TIME_OPENED)
+			sprite->changeAnimation(GODOWN);
+	}
 	if (sprite->animation() == GODOWN && sprite->animFinished())
 		sprite->changeAnimation(DOWN);
 
@@ -70,6 +76,12 @@ void Door::update(int deltaTime)
 void Door::render()
 {
 	sprite->render();
+}
+
+void Door::open()
+{
+	if (sprite->animation() == DOWN)
+		sprite->changeAnimation(GOUP);
 }
 
 void Door::setTileMap(TileMap *tileMap)

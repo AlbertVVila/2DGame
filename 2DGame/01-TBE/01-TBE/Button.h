@@ -1,15 +1,16 @@
-#ifndef _DOOR_INCLUDE
-#define _DOOR_INCLUDE
+#ifndef _BUTTON_INCLUDE
+#define _BUTTON_INCLUDE
 
 
 #include "Sprite.h"
 #include "TileMap.h"
 #include <string.h>
+#include "Door.h"
 
-// Door represents the door that gets openen and closed with buttons
+// Button represents the elevated ground that a player can step to activate a door
 
 
-class Door
+class Button
 {
 
 public:
@@ -17,17 +18,17 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void open();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setDoor(Door *d);
 
 private:
-	glm::ivec2 tileMapDispl, posDoor;
+	glm::ivec2 tileMapDispl, posButton;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
-	float opened;
+	Door *door;
 };
 
 
-#endif // _DOOR_INCLUDE
+#endif // _BUTTON_INCLUDE

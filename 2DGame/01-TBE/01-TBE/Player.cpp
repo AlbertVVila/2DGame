@@ -13,7 +13,9 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, JUMP_LEFT, JUMP_RIGHT
+	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, 
+	JUMP_LEFT, JUMP_RIGHT,JUMP_LEFT_FAIL, JUMP_RIGHT_FAIL, JUMP_LEFT_CATCH, JUMP_RIGHT_CATCH, JUMP_LEFT_SUCCESS, JUMP_RIGHT_SUCCESS,
+	SJUMP_LEFT,SJUMP_RIGHT,RJUMP_LEFT,RJUMP_RIGHT,FALL_LEFT,FALL_RIGHT
 };
 
 
@@ -25,7 +27,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(14);
+	sprite->setNumberAnimations(26);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -53,7 +55,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STANDRL, glm::vec2(0.1f, 0.1f));
 	sprite->addKeyframe(STANDRL, glm::vec2(0.2f, 0.1f));
 
-	sprite->setAnimationSpeed(SLOW_LEFT, 8);
+	sprite->setAnimationSpeed(SLOW_LEFT, 16);
 	sprite->addKeyframe(SLOW_LEFT, glm::vec2(0.7f, 0.1f));
 	sprite->addKeyframe(SLOW_LEFT, glm::vec2(0.8f, 0.1f));
 	sprite->addKeyframe(SLOW_LEFT, glm::vec2(0.9f, 0.1f));
@@ -67,7 +69,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(SLOW_LEFT, glm::vec2(0.7f, 0.15f));
 	sprite->addKeyframe(SLOW_LEFT, glm::vec2(0.8f, 0.15f));
 
-	sprite->setAnimationSpeed(SLOW_RIGHT, 8);
+	sprite->setAnimationSpeed(SLOW_RIGHT, 16);
 	sprite->addKeyframe(SLOW_RIGHT, glm::vec2(-0.8f, 0.1f));
 	sprite->addKeyframe(SLOW_RIGHT, glm::vec2(-0.9f, 0.1f));
 	sprite->addKeyframe(SLOW_RIGHT, glm::vec2(-1.f, 0.1f));
@@ -97,7 +99,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.6f, 0.f));
 	sprite->addKeyframe(START_RIGHT, glm::vec2(-0.7f, 0.f));
 
-	sprite->setAnimationSpeed(MOVE_LEFT, 8);
+	sprite->setAnimationSpeed(MOVE_LEFT, 12);
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.7f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.8f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.9f, 0.f));
@@ -107,7 +109,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.3f, 0.05f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.4f, 0.05f));
 
-	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
+	sprite->setAnimationSpeed(MOVE_RIGHT, 12);
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.8f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-0.9f, 0.f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(-1.f, 0.f));
@@ -160,6 +162,23 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.1f, 0.25f));
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.2f, 0.25f));
 
+	sprite->setAnimationSpeed(JUMP_LEFT_FAIL, 8);
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.2f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.3f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.4f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.5f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.6f, 0.25f));
+	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.7f, 0.25f));
+
+	sprite->setAnimationSpeed(JUMP_RIGHT_FAIL, 8);
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.3f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.4f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.5f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.6f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.7f, 0.25f));
+	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.8f, 0.25f));
+	
+	
 	//aquí ficaré el jump_fail que es en el cas que no faci el salt i falli i després hi haurà jump_catch i jump_succeed
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -170,35 +189,41 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	int frame = sprite->getFrame();
 	switch (sprite->animation()){
 	case MOVE_LEFT:
-		posPlayer.x -= 2;
-		break;
-	case MOVE_RIGHT:
-		posPlayer.x += 2;
-		break;
-	case STOP_LEFT:
-		posPlayer.x -= 2;
-		break;
-	case STOP_RIGHT:
-		posPlayer.x += 2;
-		break;
-	case START_LEFT:
-		posPlayer.x -= 2;
-		break;
-	case START_RIGHT:
-		posPlayer.x += 2;
-		break;
-	case SLOW_LEFT:
 		posPlayer.x -= 1;
 		break;
-	case SLOW_RIGHT:
+	case MOVE_RIGHT:
 		posPlayer.x += 1;
+		break;
+	case STOP_LEFT:
+		posPlayer.x -= 1;
+		break;
+	case STOP_RIGHT:
+		posPlayer.x += 1;
+		break;
+	case START_LEFT:
+		if (frame>=4)posPlayer.x -= 1;
+		break;
+	case START_RIGHT:
+		if (frame>=4)posPlayer.x += 1;
+		break;
+	case SLOW_LEFT:
+		if (frame > 2 && frame <5)posPlayer.x -= 1;
+		else if (frame >= 8 && frame <= 10) posPlayer.x -= 1;
+		break;
+	case SLOW_RIGHT:
+		if (frame >2 && frame<5)posPlayer.x += 1;
+		else if (frame >= 8 && frame <= 10) posPlayer.x += 1;
 		break;
 	case JUMP_LEFT:
 	case JUMP_RIGHT:
-		int frame = sprite->getFrame();
 		if (frame>9)posPlayer.y--;
+		break;
+	case JUMP_LEFT_FAIL:
+	case JUMP_RIGHT_FAIL:
+		if(frame<2)posPlayer.y++;
 		break;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(112)){ //SHIFT
@@ -269,7 +294,12 @@ void Player::update(int deltaTime)
 	
 	if (bJumping && sprite->animFinished())
 	{
-		bJumping = false;
+		if (sprite->animation() == JUMP_LEFT){
+			sprite->changeAnimation(JUMP_LEFT_FAIL);
+		}
+		else{
+			bJumping = false;
+		}
 		/**jumpAngle += JUMP_ANGLE_STEP;
 		if (jumpAngle == 180)
 		{

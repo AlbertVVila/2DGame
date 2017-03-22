@@ -132,7 +132,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STOP_RIGHT, glm::vec2(-0.6f, 0.1f));
 	sprite->addKeyframe(STOP_RIGHT, glm::vec2(-0.7f, 0.1f));
 
-	sprite->setAnimationSpeed(JUMP_LEFT, 8);
+	sprite->setAnimationSpeed(JUMP_LEFT, 10);
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.9f, 0.15f));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.f, 0.2f));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.1f, 0.2f));
@@ -147,7 +147,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.f, 0.25f));
 	sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.1f, 0.25f));
 
-	sprite->setAnimationSpeed(JUMP_RIGHT, 8);
+	sprite->setAnimationSpeed(JUMP_RIGHT, 10);
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-1.f, 0.15f));
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.1f, 0.2f));
 	sprite->addKeyframe(JUMP_RIGHT, glm::vec2(-0.2f, 0.2f));
@@ -164,7 +164,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	sprite->setAnimationSpeed(JUMP_LEFT_FAIL, 8);
 	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.2f, 0.25f));
-	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.3f, 0.25f));
+	//sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.3f, 0.25f));
 	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.4f, 0.25f));
 	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.5f, 0.25f));
 	sprite->addKeyframe(JUMP_LEFT_FAIL, glm::vec2(0.6f, 0.25f));
@@ -172,12 +172,17 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	sprite->setAnimationSpeed(JUMP_RIGHT_FAIL, 8);
 	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.3f, 0.25f));
-	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.4f, 0.25f));
+	//sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.4f, 0.25f));
 	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.5f, 0.25f));
 	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.6f, 0.25f));
 	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.7f, 0.25f));
 	sprite->addKeyframe(JUMP_RIGHT_FAIL, glm::vec2(-0.8f, 0.25f));
 	
+	sprite->setAnimationSpeed(JUMP_LEFT_CATCH, 1);
+	sprite->addKeyframe(JUMP_LEFT_CATCH, glm::vec2(0.8f, 0.25f));
+
+	sprite->setAnimationSpeed(JUMP_RIGHT_CATCH, 1);
+	sprite->addKeyframe(JUMP_RIGHT_CATCH, glm::vec2(-0.9f, 0.25f));
 	
 	//aquí ficaré el jump_fail que es en el cas que no faci el salt i falli i després hi haurà jump_catch i jump_succeed
 	sprite->changeAnimation(0);
@@ -219,11 +224,15 @@ void Player::update(int deltaTime)
 		break;
 	case JUMP_LEFT:
 	case JUMP_RIGHT:
-		if (frame>9)posPlayer.y--;
+		if (frame>9){
+			posPlayer.y--;
+		}
 		break;
 	case JUMP_LEFT_FAIL:
 	case JUMP_RIGHT_FAIL:
-		if(frame<2)posPlayer.y++;
+		if (frame < 2 ){
+			posPlayer.y++;
+		}
 		break;
 	}
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(112)){ //SHIFT
@@ -295,9 +304,11 @@ void Player::update(int deltaTime)
 	if (bJumping && sprite->animFinished())
 	{
 		if (sprite->animation() == JUMP_LEFT){
-			sprite->changeAnimation(JUMP_LEFT_FAIL);
+			if (map->JumpableLeft(posPlayer, glm::ivec2(64, 64))){
+				sprite->changeAnimation(JUMP_LEFT_CATCH);
+			}else sprite->changeAnimation(JUMP_LEFT_FAIL);
 		}
-		else{
+		else if (sprite->animation()!=JUMP_LEFT_CATCH) {
 			bJumping = false;
 		}
 		/**jumpAngle += JUMP_ANGLE_STEP;

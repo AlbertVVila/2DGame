@@ -183,6 +183,16 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
+bool TileMap::JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
+	int x, y;
+	x = pos.x / tileSizeWidth;
+	y = round((double)pos.y / (double)tileSizeHeight);
+	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 && map[(y - 1)*mapSize.x + x] != -1){ // falta afegir que vigili la pared just a sobre
+	//	if (tileSizeWidth * x + 20 > pos.x)
+			return true;
+	}
+	return false;
+}
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x0, x1, y;
@@ -194,7 +204,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	{
 		if (map[y*mapSize.x + x] != -1)
 		{
-			if (abs(*posY - tileSizeHeight * y- (7*tileSizeHeight/8) + size.y) <= 4)
+			if (abs(*posY - tileSizeHeight * y- (7*tileSizeHeight/8) + size.y) <= 8)
 			{
 				*posY = tileSizeHeight * y + 7*tileSizeHeight/8 - size.y;
 				return true;

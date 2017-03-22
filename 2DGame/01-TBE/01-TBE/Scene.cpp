@@ -12,8 +12,8 @@
 #define NUM_TORCHS 4
 #define NUM_FALLINGS 1
 #define NUM_SPIKES 1
-#define NUM_DOORS 1
-#define NUM_BUTTONS 1
+#define NUM_DOORS 5
+#define NUM_BUTTONS 5
 
 Scene::Scene()
 {
@@ -87,12 +87,24 @@ void Scene::init()
 	for (int i = 0; i < NUM_DOORS; i++)
 		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	doors[0].setPosition(glm::vec2(448, 64));
+	doors[1].setPosition(glm::vec2(1120, 448));
+	doors[2].setPosition(glm::vec2(1120, 0));
+	doors[3].setPosition(glm::vec2(1696, 320));
+	doors[4].setPosition(glm::vec2(1536, 448));
 
 	buttons = new Button[NUM_BUTTONS];
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	buttons[0].setPosition(glm::vec2(736, 128));
 	buttons[0].setDoor(&doors[0]);
+	buttons[1].setPosition(glm::vec2(992, 448));
+	buttons[1].setDoor(&doors[1]);
+	buttons[2].setPosition(glm::vec2(1472, 128));
+	buttons[2].setDoor(&doors[2]);
+	buttons[3].setPosition(glm::vec2(1440, 384));
+	buttons[3].setDoor(&doors[3]);
+	buttons[4].setPosition(glm::vec2(1792, 512));
+	buttons[4].setDoor(&doors[4]);
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 

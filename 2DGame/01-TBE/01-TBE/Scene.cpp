@@ -9,6 +9,7 @@
 #define INIT_PLAYER_X_TILES 4
 #define INIT_PLAYER_Y_TILES 3.5
 
+#define NUM_VIZIERS 1
 #define NUM_TORCHS 4
 #define NUM_FALLINGS 1
 #define NUM_SPIKES 1
@@ -26,6 +27,7 @@ Scene::Scene()
 	doors = NULL;
 	buttons = NULL;
 	player = NULL;
+	viziers = NULL;
 	other_column_front = NULL;
 }
 
@@ -47,6 +49,8 @@ Scene::~Scene()
 		delete doors;
 	if (buttons != NULL)
 		delete buttons;
+	if (viziers != NULL)
+		delete viziers;
 	if (player != NULL)
 		delete player;
 	if (other_column_front != NULL)
@@ -106,6 +110,15 @@ void Scene::init()
 	buttons[4].setPosition(glm::vec2(1792, 512));
 	buttons[4].setDoor(&doors[4]);
 
+	viziers = new Vizier();
+	for (int i = 0; i < NUM_VIZIERS; i++)
+	{
+		viziers[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		viziers[i].setTileMap(ground_wall);
+		viziers[i].setPlayer(player);
+	}
+	viziers[0].setPosition(glm::vec2(320,312));
+
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
@@ -129,6 +142,8 @@ void Scene::update(int deltaTime)
 		doors[i].update(deltaTime);
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].update(deltaTime);
+	for (int i = 0; i < NUM_VIZIERS; i++)
+		viziers[i].update(deltaTime);
 }
 
 void Scene::render()
@@ -154,6 +169,8 @@ void Scene::render()
 		doors[i].render();
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].render();
+	for (int i = 0; i < NUM_VIZIERS; i++)
+		viziers[i].render();
 	player->render();
 	other_column_front->render();
 }

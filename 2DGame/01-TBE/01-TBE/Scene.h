@@ -6,6 +6,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Vizier.h"
 #include "Torch.h"
 #include "Falling.h"
 #include "Spikes.h"
@@ -37,6 +38,7 @@ private:
 private:
 	TileMap *background, *ground_wall, *other_column_back, *other_column_front;
 	Player *player;
+	Vizier *viziers;
 	Torch *torchs;
 	Falling *fallings;
 	Spikes *spikes;

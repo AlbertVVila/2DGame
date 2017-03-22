@@ -18,6 +18,7 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	glm::vec2 getPosition();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 

@@ -164,8 +164,9 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	x = pos.x /tileSizeWidth;
 	y0 = round((double)pos.y / (double)tileSizeHeight) ;
 	if (map[y0*mapSize.x + x] < 20 && map[y0*mapSize.x + x] != -1){ // el problema es que nomes miro la pared just a l'esquerre
-			if (tileSizeWidth * x+20 > pos.x) 
-				return true;
+		if (tileSizeWidth * x + 20 > pos.x) {
+			return true;
+			}
 		}
 	return false;
 }
@@ -174,10 +175,11 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 {
 	int x, y0;
 
-	x = (pos.x + size.x - 1) / tileSizeWidth;
+	x = (pos.x + size.x/2) / tileSizeWidth;
 	y0 = round((double)pos.y / (double)tileSizeHeight);
 	if (map[y0*mapSize.x + x] < 20 && map[y0*mapSize.x + x] != -1){
-		if (tileSizeWidth*x - 40 < pos.x)
+		//dibuixa sprite per sobre
+		if (tileSizeWidth*x-30< pos.x)
 			return true;
 	}
 	return false;
@@ -187,12 +189,26 @@ bool TileMap::JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
 	int x, y;
 	x = pos.x / tileSizeWidth;
 	y = round((double)pos.y / (double)tileSizeHeight);
-	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 && map[(y - 1)*mapSize.x + x] != -1){ // falta afegir que vigili la pared just a sobre
-	//	if (tileSizeWidth * x + 20 > pos.x)
+	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 && map[(y - 1)*mapSize.x + x] != -1
+		&& map[(y - 1)*mapSize.x + (x+1)] == -1){ // mira que la pared anterior sigui buida
+		if (tileSizeWidth * x + 20 > pos.x)
 			return true;
 	}
 	return false;
 }
+
+bool TileMap::JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const{
+	int x, y;
+	x = (pos.x + size.x/2 - 1) / tileSizeWidth;
+	y = round((double)pos.y / (double)tileSizeHeight);
+	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 
+		&& map[(y - 1)*mapSize.x + x] != -1 && map[(y - 1)*mapSize.x + (x - 1)] == -1){
+		if (tileSizeWidth*x - 40 < pos.x)
+			return true;
+	}
+	return false;
+}
+
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
 	int x0, x1, y;
@@ -202,7 +218,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSizeHeight;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y*mapSize.x + x] != -1)
+		if (map[y*mapSize.x + x] < 40 && map[y*mapSize.x + x] >= 20 && map[y*mapSize.x + x] != -1)
 		{
 			if (abs(*posY - tileSizeHeight * y- (7*tileSizeHeight/8) + size.y) <= 8)
 			{

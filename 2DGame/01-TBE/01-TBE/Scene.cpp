@@ -110,6 +110,11 @@ void Scene::init()
 	buttons[4].setPosition(glm::vec2(1792, 512));
 	buttons[4].setDoor(&doors[4]);
 
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
+	player->setTileMap(ground_wall);
+
 	viziers = new Vizier();
 	for (int i = 0; i < NUM_VIZIERS; i++)
 	{
@@ -117,12 +122,7 @@ void Scene::init()
 		viziers[i].setTileMap(ground_wall);
 		viziers[i].setPlayer(player);
 	}
-	viziers[0].setPosition(glm::vec2(320,312));
-
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
-	player->setTileMap(ground_wall);
+	viziers[0].setPosition(glm::vec2(320, 312));
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;

@@ -29,7 +29,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	Player *player;
-	float timeAnim;
+	float health;
 };
 
 

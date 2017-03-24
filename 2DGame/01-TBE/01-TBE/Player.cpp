@@ -15,7 +15,7 @@ enum PlayerAnims
 {
 	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, 
 	JUMP_LEFT, JUMP_RIGHT,JUMP_LEFT_FAIL, JUMP_RIGHT_FAIL, JUMP_LEFT_CATCH, JUMP_RIGHT_CATCH, JUMP_LEFT_SUCCESS, JUMP_RIGHT_SUCCESS,
-	SJUMP_LEFT,SJUMP_RIGHT,RJUMP_LEFT,RJUMP_RIGHT,FALL_LEFT,FALL_RIGHT
+	SJUMP_LEFT, SJUMP_RIGHT, RJUMP_LEFT, RJUMP_RIGHT, FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT,STAND_UP_RIGHT
 };
 
 
@@ -23,11 +23,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	bRunning = false;
+	bFalling = false;
 	direction = "left";
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(26);
+	sprite->setNumberAnimations(28);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -222,14 +223,22 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(FALL_LEFT, glm::vec2(0.4f, 0.35f));
 	sprite->addKeyframe(FALL_LEFT, glm::vec2(0.5f, 0.35f));
 	sprite->addKeyframe(FALL_LEFT, glm::vec2(0.6f, 0.35f));
-	sprite->addKeyframe(FALL_LEFT, glm::vec2(0.7f, 0.35f));
+	
 
 	sprite->setAnimationSpeed(FALL_RIGHT,8);
 	sprite->addKeyframe(FALL_RIGHT, glm::vec2(-0.4f, 0.35f));
 	sprite->addKeyframe(FALL_RIGHT, glm::vec2(-0.5f, 0.35f));
 	sprite->addKeyframe(FALL_RIGHT, glm::vec2(-0.6f, 0.35f));
 	sprite->addKeyframe(FALL_RIGHT, glm::vec2(-0.7f, 0.35f));
-	sprite->addKeyframe(FALL_RIGHT, glm::vec2(-0.8f, 0.35f));
+
+	
+	sprite->setAnimationSpeed(FALLING_LEFT, 8);
+	sprite->addKeyframe(FALLING_LEFT, glm::vec2(0.7f, 0.35f));
+
+	sprite->setAnimationSpeed(FALLING_RIGHT, 8);
+	sprite->addKeyframe(FALLING_RIGHT, glm::vec2(-0.8f, 0.35f));
+
+	//standupleft + standupright falta
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -335,7 +344,7 @@ void Player::update(int deltaTime)
 			bJumping = true;
 		}
 	}
-	else if (sprite->animFinished() && !bJumping) // ni left ni right apretat
+	else if (sprite->animFinished() && !bJumping && !bFalling) // ni left ni right apretat
 	{
 		if (!bRunning && direction == "left")
 			sprite->changeAnimation(STAND_LEFT);
@@ -385,17 +394,27 @@ void Player::update(int deltaTime)
 	else if (!bJumping)
 	{
 		posPlayer.y += FALL_STEP;
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y) && sprite->animation()!= FALL_RIGHT){
-		//	sprite->changeAnimation(FALL_RIGHT);
-		};// hauria de ser 64x64
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 64), &posPlayer.y)){
+			if (bFalling){
+				sprite->changeAnimation(STAND_UP_RIGHT);
+			}
+			bFalling = false;
+		}
+		else if(bFalling && sprite->animation()==FALL_RIGHT && sprite->animFinished()){
+			sprite->changeAnimation(FALLING_RIGHT);
+		}
+		else if (!bFalling){
+			bFalling = true;
+			sprite->changeAnimation(FALL_RIGHT);
+		}
 	}
-	if (sprite->animation() != STAND_LEFT && !bJumping && direction == "left" && map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64)))
+	if (sprite->animation() != STAND_LEFT && !bJumping && !bFalling && direction == "left" && map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64)))
 	{
 		bRunning = false;
 		sprite->changeAnimation(STAND_LEFT);
 	}
 
-	if (sprite->animation() != STAND_RIGHT && !bJumping && direction == "right" && map->collisionMoveRight(posPlayer, glm::ivec2(64, 64)))
+	if (sprite->animation() != STAND_RIGHT && !bJumping && !bFalling && direction == "right" && map->collisionMoveRight(posPlayer, glm::ivec2(64, 64)))
 	{
 		bRunning = false;
 		sprite->changeAnimation(STAND_RIGHT);

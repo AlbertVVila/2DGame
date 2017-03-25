@@ -12,7 +12,7 @@
 #define NUM_VIZIERS 1
 #define NUM_TORCHS 4
 #define NUM_FALLINGS 1
-#define NUM_SPIKES 1
+#define NUM_SPIKES 14
 #define NUM_DOORS 5
 #define NUM_BUTTONS 5
 
@@ -74,6 +74,11 @@ void Scene::init()
 	torchs[2].setPosition(glm::vec2(427, 21));
 	torchs[3].setPosition(glm::vec2(75, 213));
 
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
+	player->setTileMap(ground_wall);
+
 	fallings = new Falling[NUM_FALLINGS];
 	for (int i = 0; i < NUM_FALLINGS; i++)
 	{
@@ -84,8 +89,24 @@ void Scene::init()
 
 	spikes = new Spikes[NUM_SPIKES];
 	for (int i = 0; i < NUM_SPIKES; i++)
+	{
 		spikes[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		spikes[i].setPlayer(player);
+	}
 	spikes[0].setPosition(glm::vec2(576, 576));
+	spikes[1].setPosition(glm::vec2(608, 576));
+	spikes[2].setPosition(glm::vec2(544, 192));
+	spikes[3].setPosition(glm::vec2(576, 192));
+	spikes[4].setPosition(glm::vec2(672, 192));
+	spikes[5].setPosition(glm::vec2(704, 192));
+	spikes[6].setPosition(glm::vec2(1120, 256));
+	spikes[7].setPosition(glm::vec2(192, 512));
+	spikes[8].setPosition(glm::vec2(1248, 576));
+	spikes[9].setPosition(glm::vec2(1824, 576));
+	spikes[10].setPosition(glm::vec2(1856, 576));
+	spikes[11].setPosition(glm::vec2(1664, 192));
+	spikes[12].setPosition(glm::vec2(1760, 128));
+	spikes[13].setPosition(glm::vec2(1568, 64));
 
 	doors = new Door[NUM_DOORS];
 	for (int i = 0; i < NUM_DOORS; i++)
@@ -109,11 +130,6 @@ void Scene::init()
 	buttons[3].setDoor(&doors[3]);
 	buttons[4].setPosition(glm::vec2(1792, 512));
 	buttons[4].setDoor(&doors[4]);
-
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); 
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
-	player->setTileMap(ground_wall);
 
 	viziers = new Vizier();
 	for (int i = 0; i < NUM_VIZIERS; i++)

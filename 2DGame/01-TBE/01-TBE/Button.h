@@ -4,8 +4,9 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include <string.h>
+#include "Player.h"
 #include "Door.h"
+#include <string.h>
 
 // Button represents the elevated ground that a player can step to activate a door
 
@@ -20,6 +21,7 @@ public:
 
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setPlayer(Player *p);
 	void setDoor(Door *d);
 
 private:
@@ -28,6 +30,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	Door *door;
+	Player *player;
 };
 
 

@@ -119,7 +119,10 @@ void Scene::init()
 
 	buttons = new Button[NUM_BUTTONS];
 	for (int i = 0; i < NUM_BUTTONS; i++)
+	{
 		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		buttons[i].setPlayer(player);
+	}
 	buttons[0].setPosition(glm::vec2(736, 128));
 	buttons[0].setDoor(&doors[0]);
 	buttons[1].setPosition(glm::vec2(992, 448));

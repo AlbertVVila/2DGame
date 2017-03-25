@@ -32,6 +32,11 @@ void Button::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Button::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	int px = player->getPosition().x;
+	int py = player->getPosition().y;
+	int bx = posButton.x;
+	int by = posButton.y;
+	int anim = sprite->animation();
 
 	if (sprite->animation() == DOWN && Game::instance().getSpecialKey(GLUT_KEY_F3))
 		sprite->changeAnimation(UP);
@@ -39,6 +44,16 @@ void Button::update(int deltaTime)
 	{
 		sprite->changeAnimation(DOWN);
 		door->open();
+	}
+
+	if (anim == UP && (py == by - 8) && (px - bx) >= -27 && (px - bx) < 15)
+	{
+		sprite->changeAnimation(DOWN);
+		door->open();
+	}
+	if (anim == DOWN && ((py != by - 8) || (px - bx) < -27 || (px - bx) >= 15))
+	{
+		sprite->changeAnimation(UP);
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posButton.x), float(tileMapDispl.y + posButton.y)));
@@ -63,4 +78,9 @@ void Button::setPosition(const glm::vec2 &pos)
 void Button::setDoor(Door *d)
 {
 	door = d;
+}
+
+void Button::setPlayer(Player *p)
+{
+	player = p;
 }

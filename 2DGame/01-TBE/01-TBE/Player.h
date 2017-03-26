@@ -19,11 +19,18 @@ public:
 	void render();
 
 	glm::vec2 getPosition();
+	int getHP();
+	bool isDead();
+	bool isAttacking();
+	bool isBlocking();
+	void damage(int amount, string type);
+	void heal(int amount);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
 private:
-	bool bCombat;
+	bool bCombat, dead;
+	int hp;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;

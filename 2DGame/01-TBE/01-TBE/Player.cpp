@@ -9,6 +9,7 @@
 #define JUMP_ANGLE_STEP 1
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
+#define MAX_LIFE 4
 
 
 enum PlayerAnims
@@ -25,6 +26,8 @@ enum PlayerAnims
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	bCombat = false;
+	hp = 3;
+	dead = false;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
@@ -766,6 +769,44 @@ glm::vec2 Player::getPosition()
 	return posPlayer;
 }
 
+int Player::getHP()
+{
+	return hp;
+}
+
+void Player::damage(int amount, string type) //aquest string es per saber quin tipus d'animació de mort farem
+{
+	hp = fmax(hp - amount, 0);
+	if (dead = hp == 0){
+/**		if (type == "PINXO"){
+			//animació mort per pinxos
+		}
+		else if (type == "FALL"){
+			//animació mort per caiguda
+		}
+		else //animació mort per enemic**/
+
+	}
+}
+
+void Player::heal(int amount){
+	hp = fmin(MAX_LIFE, hp + amount);
+}
+
+bool Player::isDead()
+{
+	return dead;
+}
+
+bool Player::isAttacking()
+{
+	return sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT; //es pot afinar més amb els frames
+}
+
+bool Player::isBlocking()
+{
+	return sprite->animation() == BLOCK_LEFT || sprite->animation() == BLOCK_RIGHT;
+}
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;

@@ -16,20 +16,19 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, 
 	JUMP_LEFT, JUMP_RIGHT,JUMP_LEFT_FAIL, JUMP_RIGHT_FAIL, JUMP_LEFT_CATCH, JUMP_RIGHT_CATCH, JUMP_LEFT_SUCCESS, JUMP_RIGHT_SUCCESS,
 	SJUMP_LEFT_START, SJUMP_RIGHT_START, SJUMP_LEFT_END, SJUMP_RIGHT_END, RJUMP_LEFT_START, RJUMP_RIGHT_START, RJUMP_LEFT_END, RJUMP_RIGHT_END, 
-	FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT, STAND_UP_RIGHT
+	FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT, STAND_UP_RIGHT,
+	DESENFUNDA_LEFT, DESENFUNDA_RIGHT, ENFUNDA_LEFT, ENFUNDA_RIGHT, ATTACK_LEFT, ATTACK_RIGHT, BLOCK_LEFT, BLOCK_RIGHT, ENGARDE_LEFT, ENGARDE_RIGHT,
+	AMOVE_LEFT_FORWARD, AMOVE_LEFT_BACK, AMOVE_RIGHT_FORWARD, AMOVE_RIGHT_BACK
 };
 
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
-	bJumping = false;
-	bRunning = false;
-	bFalling = false;
-	direction = "left";
+	bCombat = false;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(34);
+	sprite->setNumberAnimations(48);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -343,6 +342,92 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(RJUMP_RIGHT_END, glm::vec2(-0.9f, 0.55f));
 	sprite->addKeyframe(RJUMP_RIGHT_END, glm::vec2(-1.f, 0.55f));
 
+	sprite->setAnimationSpeed(ENGARDE_LEFT, 8);
+	sprite->addKeyframe(ENGARDE_LEFT, glm::vec2(0.f, 0.6f));
+
+	sprite->setAnimationSpeed(ENGARDE_RIGHT, 8);
+	sprite->addKeyframe(ENGARDE_RIGHT, glm::vec2(-0.1f, 0.6f));
+
+	sprite->setAnimationSpeed(BLOCK_LEFT, 8);
+	sprite->addKeyframe(BLOCK_LEFT, glm::vec2(0.1f, 0.6f));
+	sprite->addKeyframe(BLOCK_LEFT, glm::vec2(0.1f, 0.6f));
+	sprite->addKeyframe(BLOCK_LEFT, glm::vec2(0.1f, 0.6f));
+
+
+	sprite->setAnimationSpeed(BLOCK_RIGHT, 8);
+	sprite->addKeyframe(BLOCK_RIGHT, glm::vec2(-0.2f, 0.6f));
+	sprite->addKeyframe(BLOCK_RIGHT, glm::vec2(-0.2f, 0.6f));
+	sprite->addKeyframe(BLOCK_RIGHT, glm::vec2(-0.2f, 0.6f)); //Falta anim res592
+
+	sprite->setAnimationSpeed(DESENFUNDA_LEFT, 8);
+	sprite->addKeyframe(DESENFUNDA_LEFT, glm::vec2(0.2f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_LEFT, glm::vec2(0.3f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_LEFT, glm::vec2(0.4f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_LEFT, glm::vec2(0.5f, 0.6f));
+
+	sprite->setAnimationSpeed(DESENFUNDA_RIGHT, 8);
+	sprite->addKeyframe(DESENFUNDA_RIGHT, glm::vec2(-0.3f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_RIGHT, glm::vec2(-0.4f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_RIGHT, glm::vec2(-0.5f, 0.6f));
+	sprite->addKeyframe(DESENFUNDA_RIGHT, glm::vec2(-0.6f, 0.6f));
+
+	sprite->setAnimationSpeed(AMOVE_LEFT_FORWARD, 8);
+	sprite->addKeyframe(AMOVE_LEFT_FORWARD, glm::vec2(0.6f, 0.6f));
+	sprite->addKeyframe(AMOVE_LEFT_FORWARD, glm::vec2(0.7f, 0.6f));
+	sprite->addKeyframe(AMOVE_LEFT_FORWARD, glm::vec2(0.8f, 0.6f));
+
+	sprite->setAnimationSpeed(AMOVE_LEFT_BACK, 7);
+	sprite->addKeyframe(AMOVE_LEFT_BACK, glm::vec2(0.9f, 0.6f));
+	sprite->addKeyframe(AMOVE_LEFT_BACK, glm::vec2(0.f, 0.65f));
+
+	sprite->setAnimationSpeed(AMOVE_RIGHT_FORWARD, 8);
+	sprite->addKeyframe(AMOVE_RIGHT_FORWARD, glm::vec2(-0.7f, 0.6f));
+	sprite->addKeyframe(AMOVE_RIGHT_FORWARD, glm::vec2(-0.8f, 0.6f));
+	sprite->addKeyframe(AMOVE_RIGHT_FORWARD, glm::vec2(-0.9f, 0.6f));
+
+	sprite->setAnimationSpeed(AMOVE_RIGHT_BACK, 7);
+	sprite->addKeyframe(AMOVE_RIGHT_BACK, glm::vec2(-1.f, 0.6f));
+	sprite->addKeyframe(AMOVE_RIGHT_BACK, glm::vec2(-0.1f, 0.65f));
+
+	sprite->setAnimationSpeed(ATTACK_LEFT, 8);
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.1f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.2f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.3f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.4f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.5f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.6f, 0.65f));
+	sprite->addKeyframe(ATTACK_LEFT, glm::vec2(0.7f, 0.65f));
+
+	sprite->setAnimationSpeed(ATTACK_RIGHT, 8);
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.2f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.3f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.4f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.5f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.6f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.7f, 0.65f));
+	sprite->addKeyframe(ATTACK_RIGHT, glm::vec2(-0.8f, 0.65f));
+
+	sprite->setAnimationSpeed(ENFUNDA_LEFT, 8);
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2( 0.8f, 0.65f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.9f, 0.65f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.1f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.2f, 0.7));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.3f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.4f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.5f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_LEFT, glm::vec2(0.6f, 0.7f));
+
+	sprite->setAnimationSpeed(ENFUNDA_RIGHT, 8);
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.9f, 0.65f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-1.f, 0.65f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.1f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.2f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.3f, 0.7));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.4f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.5f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.6f, 0.7f));
+	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.7f, 0.7f));
 
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
@@ -352,6 +437,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
+	if (Game::instance().getSpecialKey(GLUT_KEY_F7)) bCombat = !bCombat;
 	sprite->update(deltaTime);
 	int frame = sprite->getFrame();
 	switch (sprite->animation()){
@@ -360,15 +446,17 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STANDLR);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_LEFT);
+		if (bCombat && Game::instance().getSpecialKey(112)) sprite->changeAnimation(DESENFUNDA_LEFT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
 		break;
 
 	case STAND_RIGHT:
-		if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(112) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SLOW_RIGHT);
-		else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(SJUMP_RIGHT_START);
-		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_RIGHT);
-		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL); 
-		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
+			if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(112) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SLOW_RIGHT);
+			else if (Game::instance().getSpecialKey(GLUT_KEY_UP) && Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(SJUMP_RIGHT_START);
+			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_RIGHT);
+			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL);
+			else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
+			if (bCombat && Game::instance().getSpecialKey(112)) sprite->changeAnimation(DESENFUNDA_RIGHT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
 		break;
 
@@ -449,7 +537,7 @@ void Player::update(int deltaTime)
 
 	case JUMP_LEFT:
 		if (frame == 0 && Game::instance().getSpecialKey(GLUT_KEY_UP) && Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SJUMP_LEFT_START);
-		if (frame>9) posPlayer.y--;
+		if (frame>10) posPlayer.y--;
 		if(sprite->animFinished()){
 			if (map->JumpableLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_LEFT_CATCH);
 			else sprite->changeAnimation(JUMP_LEFT_FAIL);
@@ -458,7 +546,7 @@ void Player::update(int deltaTime)
 
 	case JUMP_RIGHT:
 		if (frame == 0 && Game::instance().getSpecialKey(GLUT_KEY_UP) && Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SJUMP_RIGHT_START);
-		if (frame>9) posPlayer.y--;
+		if (frame>10) posPlayer.y--;
 		if (sprite->animFinished()){
 			if (map->JumpableRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_RIGHT_CATCH);
 			else sprite->changeAnimation(JUMP_RIGHT_FAIL);
@@ -526,7 +614,7 @@ void Player::update(int deltaTime)
 		break;
 
 	case SJUMP_LEFT_START:
-		if (frame >= 7) posPlayer.x -= 3;
+		if (frame >= 7) posPlayer.x -= 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(SJUMP_LEFT_END);
 			else sprite->changeAnimation(FALL_LEFT);
@@ -535,7 +623,7 @@ void Player::update(int deltaTime)
 		break;
 
 	case SJUMP_RIGHT_START:
-		if (frame >= 7) posPlayer.x += 3;
+		if (frame >= 7) posPlayer.x += 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(SJUMP_RIGHT_END);
 			else sprite->changeAnimation(FALL_RIGHT);
@@ -556,7 +644,7 @@ void Player::update(int deltaTime)
 			posPlayer.x -= 1;
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
 		}
-		else posPlayer.x -= 3;
+		else posPlayer.x -= 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(RJUMP_LEFT_END);
 			else sprite->changeAnimation(FALL_LEFT);
@@ -569,21 +657,102 @@ void Player::update(int deltaTime)
 			posPlayer.x += 1;
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
 		}
-		else posPlayer.x += 3;
+		else posPlayer.x += 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(RJUMP_RIGHT_END);
 			else sprite->changeAnimation(FALL_RIGHT);
 		}
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
 		break;
+
 	case RJUMP_LEFT_END:
 		if (sprite->animFinished()) sprite->changeAnimation(MOVE_LEFT);
 		break;
+
 	case RJUMP_RIGHT_END:
 		if (sprite->animFinished()) sprite->changeAnimation(MOVE_RIGHT);
 		break;
+
+	case DESENFUNDA_LEFT:
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_LEFT);
+		break;
+
+	case DESENFUNDA_RIGHT:
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_RIGHT);
+		break;
+
+	case ENGARDE_LEFT:
+		if (Game::instance().getSpecialKey(112)) sprite->changeAnimation(ATTACK_LEFT);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_LEFT_FORWARD); //fa falta mirar colisions costat on em moc?
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_LEFT_BACK);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_LEFT);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		break;
+
+	case ENGARDE_RIGHT:
+		if (Game::instance().getSpecialKey(112)) sprite->changeAnimation(ATTACK_RIGHT);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_RIGHT_FORWARD); //fa falta mirar colisions costat on em moc?
+		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_RIGHT_BACK);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_RIGHT);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		break;
+
+	case AMOVE_LEFT_FORWARD:
+		posPlayer.x -= 1;
+		if (sprite->animFinished() || map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		break;
+
+	case AMOVE_RIGHT_FORWARD:
+		posPlayer.x += 1;
+		if (sprite->animFinished() || map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		break;
+
+	case AMOVE_LEFT_BACK:
+		posPlayer.x += 1;
+		if (sprite->animFinished() || map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		break;
+
+	case AMOVE_RIGHT_BACK:
+		posPlayer.x -= 1;
+		if (sprite->animFinished() || map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		break;
+
+	case BLOCK_LEFT:
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_LEFT);
+		break;
+
+	case BLOCK_RIGHT:
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_RIGHT);
+		break;
+
+	case ATTACK_LEFT:
+		if (frame == 2 || frame == 3) posPlayer.x -= 1;
+		else if (frame == 4 || frame==5) posPlayer.x += 1;
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_LEFT);
+		break;
+
+	case ATTACK_RIGHT:
+		if (frame == 2 || frame == 3) posPlayer.x += 1;
+		else if (frame == 4 || frame==5) posPlayer.x -= 1;
+		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_RIGHT);
+		break;
+
+	case ENFUNDA_LEFT:
+		if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
+		break;
+
+	case ENFUNDA_RIGHT:
+		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
+		break;
 	}
 
+	//faltarien uns bools o funcions per saber estats del attack del player
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 

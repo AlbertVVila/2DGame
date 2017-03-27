@@ -39,19 +39,31 @@ void Falling::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Falling::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	int px = player->getPosition().x;
+	int py = player->getPosition().y;
+	int fx = posFalling.x;
+	int fy = posFalling.y;
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_F1))
 	{
 		sprite->changeAnimation(FALLING);
 		time_shaking = 0;
 	}
-	if (sprite->animation() == FALLING)
+	else if (sprite->animation() == IDLE && (py == fy - 8) && (px - fx) >= -27 && (px - fx) < 15)
+	{
+		sprite->changeAnimation(FALLING);
+		time_shaking = 0;
+	}
+	else if (sprite->animation() == FALLING)
 	{
 		time_shaking += deltaTime;
 		if (time_shaking >= SHAKE_TIME)
-			tileMapDispl.y += 4;
+			posFalling.y += 4;
 		if (map->collisionMoveDown(posFalling, glm::ivec2(32, 64), &posFalling.y))
+		{
 			sprite->changeAnimation(FELL);
+			posFalling.y += 8;
+		}
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posFalling.x), float(tileMapDispl.y + posFalling.y)));
@@ -65,6 +77,11 @@ void Falling::render()
 void Falling::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
+}
+
+void Falling::setPlayer(Player *p)
+{
+	player = p;
 }
 
 void Falling::setPosition(const glm::vec2 &pos)

@@ -11,7 +11,7 @@
 
 #define NUM_VIZIERS 1
 #define NUM_TORCHS 4
-#define NUM_FALLINGS 1
+#define NUM_FALLINGS 5
 #define NUM_SPIKES 14
 #define NUM_DOORS 5
 #define NUM_BUTTONS 5
@@ -84,8 +84,13 @@ void Scene::init()
 	{
 		fallings[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		fallings[i].setTileMap(ground_wall);
+		fallings[i].setPlayer(player);
 	}
 	fallings[0].setPosition(glm::vec2(224, 64));
+	fallings[1].setPosition(glm::vec2(576, 384));
+	fallings[2].setPosition(glm::vec2(608, 384));
+	fallings[3].setPosition(glm::vec2(576, 448));
+	fallings[4].setPosition(glm::vec2(608, 448));
 
 	spikes = new Spikes[NUM_SPIKES];
 	for (int i = 0; i < NUM_SPIKES; i++)

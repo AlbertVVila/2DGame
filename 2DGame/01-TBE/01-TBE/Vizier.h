@@ -19,6 +19,8 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void damage();
+
 	void setTileMap(TileMap *tileMap);
 	void setPlayer(Player *p);
 	void setPosition(const glm::vec2 &pos);
@@ -30,6 +32,8 @@ private:
 	TileMap *map;
 	Player *player;
 	float health;
+	int frameant;
+	float cd;
 };
 
 

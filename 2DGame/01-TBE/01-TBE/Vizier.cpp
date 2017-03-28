@@ -7,13 +7,16 @@
 
 #define TIME_A 2000
 #define VISION_RANGE 32 * 5
-#define ATTACK_RANGE 32 * 1 + 10
+#define ATTACK_RANGE 32 * 1 + 12
+#define COOLDOWN 500
 
 enum VizierAnims
 {
 	STAND_L, STAND_R,
 	WALK_L, WALK_R,
 	ATTACK_L, ATTACK_R,
+	BLOCK_L, BLOCK_R,
+	CD_L, CD_R,
 	DIE_L, DIE_R,
 	DEAD_L, DEAD_R
 };
@@ -24,7 +27,7 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/vizier.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(10);
+	sprite->setNumberAnimations(14);
 
 	sprite->setAnimationSpeed(STAND_L, 8);
 	sprite->addKeyframe(STAND_L, glm::vec2(0.6f, 0.25f));
@@ -58,6 +61,22 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(ATTACK_R, glm::vec2(-0.5f, 0.0f));
 	sprite->addKeyframe(ATTACK_R, glm::vec2(-0.6f, 0.0f));
 
+	sprite->setAnimationSpeed(BLOCK_L, 8);
+	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
+	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
+	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
+
+	sprite->setAnimationSpeed(BLOCK_R, 8);
+	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
+	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
+	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
+
+	sprite->setAnimationSpeed(CD_L, 8);
+	sprite->addKeyframe(CD_L, glm::vec2(0.6f, 0.25f));
+
+	sprite->setAnimationSpeed(CD_R, 8);
+	sprite->addKeyframe(CD_R, glm::vec2(-0.7f, 0.25f));
+
 	sprite->setAnimationSpeed(DIE_L, 8);
 	sprite->addKeyframe(DIE_L, glm::vec2(0.0f, 0.75f));
 	sprite->addKeyframe(DIE_L, glm::vec2(0.1f, 0.75f));
@@ -82,6 +101,7 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	sprite->changeAnimation(STAND_L);
+	frameant = 0;
 	health = 3;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
@@ -97,75 +117,101 @@ void Vizier::update(int deltaTime)
 	int vx = posVizier.x;
 	int vy = posVizier.y;
 	int anim = sprite->animation();
+	bool chase = py == vy && abs(px - vx) < VISION_RANGE && abs(px - vx) > ATTACK_RANGE;
+	bool outsight = (py != vy || abs(px - vx) >= VISION_RANGE);
+	bool attack = py == vy && abs(px - vx) <= ATTACK_RANGE;
+	bool block = false;
 
-	switch (anim){
-		case WALK_L:
-			if(frame == 2) posVizier.x -= 1;
-			break;
-		case WALK_R:
-			if (frame == 2) posVizier.x += 1;
-			break;
-		default:
-			break;
-	}
-
-	if ((anim == STAND_L || anim == ATTACK_L) && px > vx)		//Look right
+	switch (anim)
 	{
-		sprite->changeAnimation(STAND_R);
+	case STAND_L:
+		if (health == 0) sprite->changeAnimation(DIE_L);
+		else if (px > vx) sprite->changeAnimation(STAND_R);
+		else if (chase) sprite->changeAnimation(WALK_L);
+		else if (attack) sprite->changeAnimation(ATTACK_L);
+		break;
+	case STAND_R:
+		if (health == 0) sprite->changeAnimation(DIE_R);
+		else if (px < vx) sprite->changeAnimation(STAND_L);
+		else if (chase) sprite->changeAnimation(WALK_R);
+		else if (attack) sprite->changeAnimation(ATTACK_R);
+		break;
+	case ATTACK_L:
+		if (health == 0) sprite->changeAnimation(DIE_L);
+		else if (px > vx) sprite->changeAnimation(STAND_R);
+		else if (chase && sprite->animFinished()) sprite->changeAnimation(WALK_L);
+		else if (outsight) sprite->changeAnimation(STAND_L);
+		else if (block && sprite->animFinished()) sprite->changeAnimation(BLOCK_L);
+		else if (sprite->animFinished()) { cd = 0; sprite->changeAnimation(CD_L); }
+		else if (frameant == 1 && frame == 2) posVizier.x -= 11;
+		else if (frameant == 2 && frame == 3) posVizier.x -= 4;
+		else if (frameant == 3 && frame == 4) posVizier.x += 13;
+		else if (frameant == 4 && frame == 5) posVizier.x += 2;
+		if (frame == 3) player->damage(1,"enemy");
+		break;
+	case ATTACK_R:
+		if (health == 0) sprite->changeAnimation(DIE_R);
+		else if (px < vx) sprite->changeAnimation(STAND_L);
+		else if (chase && sprite->animFinished()) sprite->changeAnimation(WALK_R);
+		else if (outsight) sprite->changeAnimation(STAND_R);
+		else if (block && sprite->animFinished()) sprite->changeAnimation(BLOCK_R);
+		else if (sprite->animFinished()) { cd = 0; sprite->changeAnimation(CD_R); }
+		else if (frameant == 1 && frame == 2) posVizier.x += 11;
+		else if (frameant == 2 && frame == 3) posVizier.x += 4;
+		else if (frameant == 3 && frame == 4) posVizier.x -= 13;
+		else if (frameant == 4 && frame == 5) posVizier.x -= 2;
+		if (frame == 3) player->damage(1, "enemy");
+		break;
+	case CD_L:
+		cd += deltaTime;
+		if (health == 0) sprite->changeAnimation(DIE_L);
+		else if (cd >= COOLDOWN) sprite->changeAnimation(ATTACK_L);
+		break;
+	case CD_R:
+		cd += deltaTime;
+		if (health == 0) sprite->changeAnimation(DIE_R);
+		else if (cd >= COOLDOWN) sprite->changeAnimation(ATTACK_R);
+		break;
+	case WALK_L:
+		if (frameant == 0 && frame == 1) posVizier.x -= 12;
+		if (health == 0) sprite->changeAnimation(DIE_L);
+		else if (outsight) sprite->changeAnimation(STAND_L);
+		else if (attack) sprite->changeAnimation(ATTACK_L);
+		break;
+	case WALK_R:
+		if (frameant == 0 && frame == 1) posVizier.x += 12;
+		if (health == 0) sprite->changeAnimation(DIE_R);
+		else if (outsight) sprite->changeAnimation(STAND_R);
+		else if (attack) sprite->changeAnimation(ATTACK_R);
+		break;
+	case BLOCK_L:
+		if (health == 0) sprite->changeAnimation(DIE_L);
+		else if (sprite->animFinished()) sprite->changeAnimation(ATTACK_L);
+		break;
+	case BLOCK_R:
+		if (health == 0) sprite->changeAnimation(DIE_R);
+		else if (sprite->animFinished()) sprite->changeAnimation(ATTACK_R);
+		break;
+	case DIE_L:
+		if (sprite->animFinished()) sprite->changeAnimation(DEAD_L);
+		break;
+	case DIE_R:
+		if (sprite->animFinished()) sprite->changeAnimation(DEAD_R);
+		break;
 	}
 
-	if ((anim == STAND_R || anim == ATTACK_R) && px < vx)		//Look left
-	{
-		sprite->changeAnimation(STAND_L);
-	}
-
-	if (py == vy && abs(px - vx) < VISION_RANGE && abs(px - vx) > ATTACK_RANGE && (anim == STAND_L || anim == STAND_R || anim == ATTACK_L || anim == ATTACK_R))		//Walk to player
-	{
-		if (anim == STAND_L || anim == ATTACK_L)
-			sprite->changeAnimation(WALK_L);
-		else
-			sprite->changeAnimation(WALK_R);
-	}
-
-	if ((anim == WALK_L || anim == WALK_R || anim == ATTACK_L || anim == ATTACK_R) && (py != vy || abs(px - vx) >= VISION_RANGE))		//Stand
-	{
-		if (anim == WALK_L || anim == ATTACK_L)
-			sprite->changeAnimation(STAND_L);
-		else
-			sprite->changeAnimation(STAND_R);
-	}
-
-	if (py == vy && abs(px - vx) <= ATTACK_RANGE && (anim == STAND_L || anim == STAND_R || anim == WALK_L || anim == WALK_R))		//Attack player
-	{
-		if (anim == STAND_L || anim == WALK_L)
-			sprite->changeAnimation(ATTACK_L);
-		else
-			sprite->changeAnimation(ATTACK_R);
-	}
-
-	if (health == 0 && anim != DIE_L && anim != DIE_R && anim != DEAD_L && anim != DEAD_R)									//Die
-	{
-		if (anim == STAND_L || anim == WALK_L || anim == ATTACK_L)
-			sprite->changeAnimation(DIE_L);
-		else
-			sprite->changeAnimation(DIE_R);
-	}
-
-	if ((anim == DIE_L || anim == DIE_R) && sprite->animFinished())				//Dead
-	{
-		if (anim == DIE_L)
-			sprite->changeAnimation(DEAD_L);
-		else
-			sprite->changeAnimation(DEAD_R);
-	}
-
-
+	frameant = frame;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }
 
 void Vizier::render()
 {
 	sprite->render();
+}
+
+void Vizier::damage()
+{
+	health -= 1;
 }
 
 void Vizier::setTileMap(TileMap *tileMap)

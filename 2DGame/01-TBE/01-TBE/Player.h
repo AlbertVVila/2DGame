@@ -22,11 +22,13 @@ public:
 	int getHP();
 	bool isDead();
 	bool isAttacking();
+	bool isAttackingLong();
 	bool isBlocking();
 	void damage(int amount, string type);
 	void heal(int amount);
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setCombat(bool combat);
 
 private:
 	bool bCombat, dead;
@@ -36,6 +38,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+	bool teEspasa;
 
 };
 

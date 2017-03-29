@@ -433,6 +433,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.7f, 0.7f));
 
 	sprite->changeAnimation(0);
+	teEspasa = true;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x+posPlayer.x), float(tileMapDispl.y+posPlayer.y)));
 
@@ -440,7 +441,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
-	if (Game::instance().getSpecialKey(GLUT_KEY_F7)) bCombat = !bCombat;
+	//if (Game::instance().getSpecialKey(GLUT_KEY_F7)) bCombat = !bCombat;
 	sprite->update(deltaTime);
 	int frame = sprite->getFrame();
 	switch (sprite->animation()){
@@ -449,7 +450,7 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STANDLR);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_LEFT);
-		if (bCombat && Game::instance().getSpecialKey(112)) sprite->changeAnimation(DESENFUNDA_LEFT);
+		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
 		break;
 
@@ -459,7 +460,7 @@ void Player::update(int deltaTime)
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_RIGHT);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
-			if (bCombat && Game::instance().getSpecialKey(112)) sprite->changeAnimation(DESENFUNDA_RIGHT);
+			if (bCombat) sprite->changeAnimation(DESENFUNDA_RIGHT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
 		break;
 
@@ -691,6 +692,7 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_LEFT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!bCombat) sprite->changeAnimation(ENFUNDA_LEFT);
 		break;
 
 	case ENGARDE_RIGHT:
@@ -700,6 +702,7 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_RIGHT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_RIGHT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!bCombat) sprite->changeAnimation(ENFUNDA_RIGHT);
 		break;
 
 	case AMOVE_LEFT_FORWARD:
@@ -777,7 +780,8 @@ int Player::getHP()
 void Player::damage(int amount, string type) //aquest string es per saber quin tipus d'animació de mort farem
 {
 	hp = fmax(hp - amount, 0);
-	if (dead = hp == 0){
+	dead = hp == 0;
+	if (dead){
 /**		if (type == "PINXO"){
 			//animació mort per pinxos
 		}
@@ -800,7 +804,13 @@ bool Player::isDead()
 
 bool Player::isAttacking()
 {
-	return sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT; //es pot afinar més amb els frames
+	int frame = sprite->getFrame();
+	return (frame == 5) && (sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT); //es pot afinar més amb els frames
+}
+
+bool Player::isAttackingLong()
+{
+	return sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT;
 }
 
 bool Player::isBlocking()
@@ -816,6 +826,11 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+void Player::setCombat(bool combat)
+{
+	bCombat = combat;
 }
 
 

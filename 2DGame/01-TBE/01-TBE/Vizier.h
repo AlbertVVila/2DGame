@@ -20,6 +20,7 @@ public:
 	void render();
 
 	void damage();
+	bool isInRange();
 
 	void setTileMap(TileMap *tileMap);
 	void setPlayer(Player *p);
@@ -33,7 +34,8 @@ private:
 	Player *player;
 	float health;
 	int frameant;
-	float cd;
+	float cd, cd_damage;
+	bool bloked;
 };
 
 

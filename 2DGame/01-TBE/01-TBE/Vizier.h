@@ -19,9 +19,6 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void damage();
-	bool isInRange();
-
 	void setTileMap(TileMap *tileMap);
 	void setPlayer(Player *p);
 	void setPosition(const glm::vec2 &pos);

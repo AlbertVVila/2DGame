@@ -66,8 +66,12 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
 	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
 	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
+	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
+	sprite->addKeyframe(BLOCK_L, glm::vec2(0.0f, 0.5f));
 
 	sprite->setAnimationSpeed(BLOCK_R, 8);
+	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
+	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
 	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
 	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
 	sprite->addKeyframe(BLOCK_R, glm::vec2(-0.1f, 0.5f));
@@ -172,7 +176,7 @@ void Vizier::update(int deltaTime)
 	case CD_R:
 		cd += deltaTime;
 		if (health == 0) sprite->changeAnimation(DIE_R);
-		else if (cd >= COOLDOWN && player->isAttackingLong() && !bloked) { bloked = true;  sprite->changeAnimation(BLOCK_R); }
+		else if (player->isAttackingLong() && !bloked) { bloked = true;  sprite->changeAnimation(BLOCK_R); }
 		else if (cd >= COOLDOWN) { bloked = false; sprite->changeAnimation(ATTACK_R); }
 		break;
 	case WALK_L:
@@ -206,10 +210,10 @@ void Vizier::update(int deltaTime)
 	if (player->isAttacking() && cd_damage >= CD_DAMAGE && anim!=BLOCK_L && anim!=BLOCK_R)
 	{
 		cd_damage = 0;
-		damage();
-		cd = -COOLDOWN;
-		if (anim == ATTACK_L || anim == CD_L || anim == BLOCK_L) sprite->changeAnimation(CD_L);
-		if (anim == ATTACK_R || anim == CD_R || anim == BLOCK_R) sprite->changeAnimation(CD_R);
+		health -= 1;
+		//cd = -COOLDOWN;
+		//if (anim == ATTACK_L || anim == CD_L || anim == BLOCK_L) sprite->changeAnimation(CD_L);
+		//if (anim == ATTACK_R || anim == CD_R || anim == BLOCK_R) sprite->changeAnimation(CD_R);
 	}
 	else cd_damage += deltaTime;
 
@@ -220,16 +224,6 @@ void Vizier::update(int deltaTime)
 void Vizier::render()
 {
 	sprite->render();
-}
-
-void Vizier::damage()
-{
-	health -= 1;
-}
-
-bool Vizier::isInRange()
-{
-	return player->getPosition().y == posVizier.y && abs(player->getPosition().x - posVizier.x) <= ATTACK_RANGE;
 }
 
 void Vizier::setTileMap(TileMap *tileMap)

@@ -47,6 +47,7 @@ void Door::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	sprite->changeAnimation(0);
+	timeOpened = 5000;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
 
@@ -64,7 +65,7 @@ void Door::update(int deltaTime)
 	if (sprite->animation() == UP)
 	{
 		opened += deltaTime;
-		if (opened >= TIME_OPENED)
+		if (opened >= timeOpened)
 			sprite->changeAnimation(GODOWN);
 	}
 	if (sprite->animation() == GODOWN && sprite->animFinished())
@@ -93,4 +94,9 @@ void Door::setPosition(const glm::vec2 &pos)
 {
 	posDoor = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
+}
+
+void Door::setTimeOpened(int time)
+{
+	timeOpened = time;
 }

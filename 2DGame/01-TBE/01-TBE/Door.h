@@ -20,12 +20,14 @@ public:
 	void open();
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
+	void setTimeOpened(int time);
 
 private:
 	glm::ivec2 tileMapDispl, posDoor;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+	int timeOpened;
 	float opened;
 };
 

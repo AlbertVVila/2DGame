@@ -207,7 +207,7 @@ void Vizier::update(int deltaTime)
 		break;
 	}
 
-	if (player->isAttacking() && cd_damage >= CD_DAMAGE && anim!=BLOCK_L && anim!=BLOCK_R)
+	if (player->isAttacking() && cd_damage >= CD_DAMAGE && anim!=BLOCK_L && anim!=BLOCK_R && attack)
 	{
 		cd_damage = 0;
 		health -= 1;

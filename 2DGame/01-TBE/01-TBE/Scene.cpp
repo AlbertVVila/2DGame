@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include "Scene.h"
+#include "Game.h"
 
 #define SCREEN_X 0
 #define SCREEN_Y 0
@@ -9,8 +12,8 @@
 #define INIT_PLAYER_X_TILES 4
 #define INIT_PLAYER_Y_TILES 3.9
 
-#define NUM_VIZIERS 1
-#define NUM_TORCHS 4
+#define NUM_VIZIERS 2
+#define NUM_TORCHS 23
 #define NUM_FALLINGS 6
 #define NUM_SPIKES 14
 #define NUM_DOORS 5
@@ -73,6 +76,25 @@ void Scene::init()
 	torchs[1].setPosition(glm::vec2(235, 21));
 	torchs[2].setPosition(glm::vec2(427, 21));
 	torchs[3].setPosition(glm::vec2(75, 213));
+	torchs[4].setPosition(glm::vec2(75, 469));
+	torchs[5].setPosition(glm::vec2(171, 469));
+	torchs[6].setPosition(glm::vec2(235, 277));
+	torchs[7].setPosition(glm::vec2(555, 85));
+	torchs[8].setPosition(glm::vec2(843, 85));
+	torchs[9].setPosition(glm::vec2(1131, 85));
+	torchs[10].setPosition(glm::vec2(1131, -43));
+	torchs[11].setPosition(glm::vec2(1195, -43));
+	torchs[12].setPosition(glm::vec2(1643, -43));
+	torchs[13].setPosition(glm::vec2(1643, 85));
+	torchs[14].setPosition(glm::vec2(1643, 341));
+	torchs[15].setPosition(glm::vec2(1515, 341));
+	torchs[16].setPosition(glm::vec2(1547, 469));
+	torchs[17].setPosition(glm::vec2(1803, 469));
+	torchs[18].setPosition(glm::vec2(523, 469));
+	torchs[19].setPosition(glm::vec2(715, 469));
+	torchs[20].setPosition(glm::vec2(907, 533));
+	torchs[21].setPosition(glm::vec2(1099, 405));
+	torchs[22].setPosition(glm::vec2(1195, 405));
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -123,6 +145,12 @@ void Scene::init()
 	doors[3].setPosition(glm::vec2(1696, 320));
 	doors[4].setPosition(glm::vec2(1536, 448));
 
+	doors[0].setTimeOpened(10000);
+	doors[1].setTimeOpened(5000);
+	doors[2].setTimeOpened(15000);
+	doors[3].setTimeOpened(25000);
+	doors[4].setTimeOpened(30000);
+
 	buttons = new Button[NUM_BUTTONS];
 	for (int i = 0; i < NUM_BUTTONS; i++)
 	{
@@ -140,7 +168,7 @@ void Scene::init()
 	buttons[4].setPosition(glm::vec2(1792, 512));
 	buttons[4].setDoor(&doors[4]);
 
-	viziers = new Vizier();
+	viziers = new Vizier[NUM_VIZIERS];
 	for (int i = 0; i < NUM_VIZIERS; i++)
 	{
 		viziers[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -148,8 +176,10 @@ void Scene::init()
 		viziers[i].setPlayer(player);
 	}
 	viziers[0].setPosition(glm::vec2(320, 312));
+	viziers[1].setPosition(glm::vec2(320, 504));
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
+	//projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f, 0.f);
 	currentTime = 0.0f;
 }
 
@@ -179,6 +209,10 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
+	/*if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
+	{
+		modelview = glm::translate(modelview, glm::vec3(10.f * 32, 0.f, 0.f));
+	}*/
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();

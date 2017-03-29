@@ -29,6 +29,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setCombat(bool combat);
+	void getSword();
 
 private:
 	bool bCombat, dead;

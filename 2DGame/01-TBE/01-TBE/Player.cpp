@@ -833,6 +833,11 @@ void Player::setCombat(bool combat)
 	bCombat = combat;
 }
 
+void Player::getSword()
+{
+	
+}
+
 
 
 

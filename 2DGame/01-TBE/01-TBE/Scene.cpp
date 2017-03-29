@@ -29,6 +29,7 @@ Scene::Scene()
 	spikes = NULL;
 	doors = NULL;
 	buttons = NULL;
+	sword = NULL;
 	player = NULL;
 	viziers = NULL;
 	other_column_front = NULL;
@@ -52,6 +53,8 @@ Scene::~Scene()
 		delete doors;
 	if (buttons != NULL)
 		delete buttons;
+	if (sword != NULL)
+		delete sword;
 	if (viziers != NULL)
 		delete viziers;
 	if (player != NULL)
@@ -168,6 +171,11 @@ void Scene::init()
 	buttons[4].setPosition(glm::vec2(1792, 512));
 	buttons[4].setDoor(&doors[4]);
 
+	sword = new Sword();
+	sword->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	sword->setPlayer(player);
+	sword->setPosition(glm::vec2(1738,576));
+
 	viziers = new Vizier[NUM_VIZIERS];
 	for (int i = 0; i < NUM_VIZIERS; i++)
 	{
@@ -197,6 +205,7 @@ void Scene::update(int deltaTime)
 		doors[i].update(deltaTime);
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].update(deltaTime);
+	sword->update(deltaTime);
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].update(deltaTime);
 }
@@ -228,6 +237,7 @@ void Scene::render()
 		doors[i].render();
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].render();
+	sword->render();
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].render();
 	player->render();

@@ -13,6 +13,7 @@
 #include "Door.h"
 #include "Button.h"
 #include "Sword.h"
+#include "Clock.h"
 
 #define CAMERA_WIDTH 60*32	
 #define CAMERA_HEIGHT 12*64
@@ -46,6 +47,7 @@ private:
 	Door *doors;
 	Button *buttons;
 	Sword *sword;
+	Clock *clocks;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

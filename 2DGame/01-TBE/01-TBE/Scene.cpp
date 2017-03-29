@@ -18,6 +18,7 @@
 #define NUM_SPIKES 14
 #define NUM_DOORS 5
 #define NUM_BUTTONS 5
+#define NUM_CLOCKS 2
 
 Scene::Scene()
 {
@@ -30,6 +31,7 @@ Scene::Scene()
 	doors = NULL;
 	buttons = NULL;
 	sword = NULL;
+	clocks = NULL;
 	player = NULL;
 	viziers = NULL;
 	other_column_front = NULL;
@@ -55,6 +57,8 @@ Scene::~Scene()
 		delete buttons;
 	if (sword != NULL)
 		delete sword;
+	if (clocks != NULL)
+		delete clocks;
 	if (viziers != NULL)
 		delete viziers;
 	if (player != NULL)
@@ -176,6 +180,17 @@ void Scene::init()
 	sword->setPlayer(player);
 	sword->setPosition(glm::vec2(1738,576));
 
+	clocks = new Clock[NUM_CLOCKS];
+	for (int i = 0; i < NUM_CLOCKS; i++)
+	{
+		clocks[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		clocks[i].setPlayer(player);
+	}
+	clocks[0].setPosition(glm::vec2(1024, 320));
+	clocks[0].setTarget(glm::vec2(1600, 0));
+	clocks[1].setPosition(glm::vec2(1632, 0));
+	clocks[1].setTarget(glm::vec2(1056, 320));
+
 	viziers = new Vizier[NUM_VIZIERS];
 	for (int i = 0; i < NUM_VIZIERS; i++)
 	{
@@ -206,6 +221,8 @@ void Scene::update(int deltaTime)
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].update(deltaTime);
 	sword->update(deltaTime);
+	for (int i = 0; i < NUM_CLOCKS; i++)
+		clocks[i].update(deltaTime);
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].update(deltaTime);
 }
@@ -238,6 +255,8 @@ void Scene::render()
 	for (int i = 0; i < NUM_BUTTONS; i++)
 		buttons[i].render();
 	sword->render();
+	for (int i = 0; i < NUM_CLOCKS; i++)
+		clocks[i].render();
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].render();
 	player->render();

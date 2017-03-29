@@ -53,14 +53,10 @@ void Spikes::update(int deltaTime)
 	int sy = posSpikes.y;
 	int anim = sprite->animation();
 
-	if (Game::instance().getSpecialKey(GLUT_KEY_F2))
-	{
-		sprite->changeAnimation(GOUP);
-	}
-
 	if (anim == DOWN && (py == sy - 8) && (px - sx) >= -16 && (px - sx) < 15)
 	{
 		sprite->changeAnimation(GOUP);
+		player->damage(3,"PINXO");
 	}
 
 	if (anim == GOUP && sprite->animFinished())
@@ -84,11 +80,6 @@ void Spikes::update(int deltaTime)
 void Spikes::render()
 {
 	sprite->render();
-}
-
-void Spikes::setTileMap(TileMap *tileMap)
-{
-	map = tileMap;
 }
 
 void Spikes::setPlayer(Player *p)

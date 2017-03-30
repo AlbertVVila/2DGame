@@ -33,6 +33,8 @@ public:
 
 private:
 	bool bCombat, dead;
+	string direction;
+	int falldist;
 	int hp;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;

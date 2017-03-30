@@ -107,7 +107,6 @@ void Scene::init()
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
-
 	fallings = new Falling[NUM_FALLINGS];
 	for (int i = 0; i < NUM_FALLINGS; i++)
 	{
@@ -208,6 +207,9 @@ void Scene::init()
 
 void Scene::update(int deltaTime)
 {
+	if (player->isDead() && Game::instance().getKey(13)){ //enter key
+		this->init();
+	}
 	currentTime += deltaTime;
 	player->update(deltaTime);
 	for (int i = 0; i < NUM_TORCHS; i++)

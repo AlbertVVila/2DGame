@@ -153,7 +153,7 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x -= 4;
 		else if (frameant == 3 && frame == 4) posVizier.x += 13;
 		else if (frameant == 4 && frame == 5) posVizier.x += 2;
-		if (frame == 3 && !player->isBlocking()) player->damage(1,"enemy");
+		if (frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1,"enemy");
 		break;
 	case ATTACK_R:
 		if (health == 0) sprite->changeAnimation(DIE_R);
@@ -165,7 +165,7 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x += 4;
 		else if (frameant == 3 && frame == 4) posVizier.x -= 13;
 		else if (frameant == 4 && frame == 5) posVizier.x -= 2;
-		if (frame == 3 && !player->isBlocking()) player->damage(1, "enemy");
+		if (frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
 		break;
 	case CD_L:
 		cd += deltaTime;
@@ -176,7 +176,7 @@ void Vizier::update(int deltaTime)
 	case CD_R:
 		cd += deltaTime;
 		if (health == 0) sprite->changeAnimation(DIE_R);
-		else if (player->isAttackingLong() && !bloked) { bloked = true;  sprite->changeAnimation(BLOCK_R); }
+		else if (cd >= COOLDOWN && player->isAttackingLong() && !bloked) { bloked = true;  sprite->changeAnimation(BLOCK_R); }
 		else if (cd >= COOLDOWN) { bloked = false; sprite->changeAnimation(ATTACK_R); }
 		break;
 	case WALK_L:

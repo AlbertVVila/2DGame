@@ -19,7 +19,8 @@ enum PlayerAnims
 	SJUMP_LEFT_START, SJUMP_RIGHT_START, SJUMP_LEFT_END, SJUMP_RIGHT_END, RJUMP_LEFT_START, RJUMP_RIGHT_START, RJUMP_LEFT_END, RJUMP_RIGHT_END, 
 	FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT, STAND_UP_RIGHT,
 	DESENFUNDA_LEFT, DESENFUNDA_RIGHT, ENFUNDA_LEFT, ENFUNDA_RIGHT, ATTACK_LEFT, ATTACK_RIGHT, BLOCK_LEFT, BLOCK_RIGHT, ENGARDE_LEFT, ENGARDE_RIGHT,
-	AMOVE_LEFT_FORWARD, AMOVE_LEFT_BACK, AMOVE_RIGHT_FORWARD, AMOVE_RIGHT_BACK
+	AMOVE_LEFT_FORWARD, AMOVE_LEFT_BACK, AMOVE_RIGHT_FORWARD, AMOVE_RIGHT_BACK, DEATHPINX_LEFT, DEATHPINX_RIGHT, DEATHENEMY_LEFT, DEATHENEMY_RIGHT,
+	DEATHFALL_LEFT,DEATHFALL_RIGHT
 };
 
 
@@ -28,10 +29,11 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bCombat = false;
 	hp = 3;
 	dead = false;
+	falldist = 0;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(48);
+	sprite->setNumberAnimations(54);
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -432,6 +434,32 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.6f, 0.7f));
 	sprite->addKeyframe(ENFUNDA_RIGHT, glm::vec2(-0.7f, 0.7f));
 
+	sprite->setAnimationSpeed(DEATHPINX_LEFT, 8);
+	sprite->addKeyframe(DEATHPINX_LEFT, glm::vec2(0.7f, 0.7f));
+
+	sprite->setAnimationSpeed(DEATHPINX_RIGHT, 8);
+	sprite->addKeyframe(DEATHPINX_RIGHT, glm::vec2(-0.8f, 0.7f));
+
+	sprite->setAnimationSpeed(DEATHENEMY_LEFT, 8);
+	sprite->addKeyframe(DEATHENEMY_LEFT, glm::vec2(0.8f, 0.7f));
+	sprite->addKeyframe(DEATHENEMY_LEFT, glm::vec2(0.9f, 0.7f));
+	sprite->addKeyframe(DEATHENEMY_LEFT, glm::vec2(0.f, 0.75f));
+	sprite->addKeyframe(DEATHENEMY_LEFT, glm::vec2(0.1f, 0.75f));
+	sprite->addKeyframe(DEATHENEMY_LEFT, glm::vec2(0.2f, 0.75f));
+
+	sprite->setAnimationSpeed(DEATHENEMY_RIGHT, 8);
+	sprite->addKeyframe(DEATHENEMY_RIGHT, glm::vec2(-0.9f, 0.7f));
+	sprite->addKeyframe(DEATHENEMY_RIGHT, glm::vec2(-1.f, 0.7f));
+	sprite->addKeyframe(DEATHENEMY_RIGHT, glm::vec2(-0.1f, 0.75f));
+	sprite->addKeyframe(DEATHENEMY_RIGHT, glm::vec2(-0.2f, 0.75f));
+	sprite->addKeyframe(DEATHENEMY_RIGHT, glm::vec2(-0.3f, 0.75f));
+
+	sprite->setAnimationSpeed(DEATHFALL_LEFT, 8);
+	sprite->addKeyframe(DEATHFALL_LEFT, glm::vec2(0.3f, 0.75f));
+
+	sprite->setAnimationSpeed(DEATHFALL_RIGHT, 8);
+	sprite->addKeyframe(DEATHFALL_RIGHT, glm::vec2(-0.4f, 0.75f));
+
 	sprite->changeAnimation(0);
 	teEspasa = true;
 	tileMapDispl = tileMapPos;
@@ -441,17 +469,22 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 void Player::update(int deltaTime)
 {
-	//if (Game::instance().getSpecialKey(GLUT_KEY_F7)) bCombat = !bCombat;
+	int dist;
 	sprite->update(deltaTime);
 	int frame = sprite->getFrame();
-	switch (sprite->animation()){
+	int s = sprite->animation();
+	direction = s % 2 == 0 ? "left" : "right";
+	switch (s){
 	case STAND_LEFT:
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(112) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SLOW_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STANDLR);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_LEFT);
 		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case STAND_RIGHT:
@@ -461,7 +494,10 @@ void Player::update(int deltaTime)
 			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
 			if (bCombat) sprite->changeAnimation(DESENFUNDA_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+				sprite->changeAnimation(FALL_RIGHT);
+				falldist = posPlayer.y;
+			}
 		break;
 
 	case STANDRL:
@@ -479,7 +515,11 @@ void Player::update(int deltaTime)
 		else if (sprite->animFinished()) sprite->changeAnimation(STOP_LEFT);
 
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+
+		}
 		break;
 
 	case START_RIGHT:
@@ -489,7 +529,10 @@ void Player::update(int deltaTime)
 		else if (sprite->animFinished()) sprite->changeAnimation(STOP_RIGHT);
 
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case MOVE_LEFT:
@@ -497,7 +540,10 @@ void Player::update(int deltaTime)
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(RJUMP_LEFT_START);
 		if (sprite->animFinished() && !Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STOP_LEFT);
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 
 		break;
 
@@ -506,21 +552,31 @@ void Player::update(int deltaTime)
 		if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(RJUMP_RIGHT_START);
 		if (sprite->animFinished() && !Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STOP_RIGHT);
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case STOP_LEFT:
 		posPlayer.x -= 1;
 		if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
+
 		break;
 
 	case STOP_RIGHT:
 		posPlayer.x += 1;
 		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case SLOW_LEFT:
@@ -528,7 +584,10 @@ void Player::update(int deltaTime)
 		else if (frame >= 8 && frame <= 10) posPlayer.x -= 1;
 		if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case SLOW_RIGHT:
@@ -536,7 +595,10 @@ void Player::update(int deltaTime)
 		else if (frame >= 8 && frame <= 10) posPlayer.x += 1;
 		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case JUMP_LEFT:
@@ -610,18 +672,25 @@ void Player::update(int deltaTime)
 		break;
 
 	case STAND_UP_LEFT:
-		if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
+		dist = (posPlayer.y - falldist) / 64;
+		if (dist > 2) this->damage(dist, "FALL");
+		else if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
 		break;
 
 	case STAND_UP_RIGHT:
-		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
+		dist = (posPlayer.y - falldist) / 64;
+		if (dist > 2) this->damage(dist, "FALL");
+		else if(sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 		break;
 
 	case SJUMP_LEFT_START:
 		if (frame >= 7) posPlayer.x -= 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(SJUMP_LEFT_END);
-			else sprite->changeAnimation(FALL_LEFT);
+			else {
+				sprite->changeAnimation(FALL_LEFT);
+				falldist = posPlayer.y;
+			}
 		}
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
 		break;
@@ -630,7 +699,10 @@ void Player::update(int deltaTime)
 		if (frame >= 7) posPlayer.x += 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(SJUMP_RIGHT_END);
-			else sprite->changeAnimation(FALL_RIGHT);
+			else {
+				sprite->changeAnimation(FALL_RIGHT);
+				falldist = posPlayer.y;
+			}
 		}
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
 		break;
@@ -646,12 +718,18 @@ void Player::update(int deltaTime)
 	case RJUMP_LEFT_START:
 		if (frame <= 4) {
 			posPlayer.x -= 1;
-			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+				sprite->changeAnimation(FALL_LEFT);
+				falldist = posPlayer.y;
+			}
 		}
 		else posPlayer.x -= 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(RJUMP_LEFT_END);
-			else sprite->changeAnimation(FALL_LEFT);
+			else{
+				sprite->changeAnimation(FALL_LEFT);
+				falldist = posPlayer.y;
+			}
 		}
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_LEFT);
 		break;
@@ -659,12 +737,18 @@ void Player::update(int deltaTime)
 	case RJUMP_RIGHT_START:
 		if (frame <= 4) {
 			posPlayer.x += 1;
-			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+				sprite->changeAnimation(FALL_RIGHT);
+				falldist = posPlayer.y;
+			}
 		}
 		else posPlayer.x += 2;
 		if (sprite->animFinished()){
 			if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(RJUMP_RIGHT_END);
-			else sprite->changeAnimation(FALL_RIGHT);
+			else {
+				sprite->changeAnimation(FALL_RIGHT);
+				falldist = posPlayer.y;
+			}
 		}
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(STAND_RIGHT);
 		break;
@@ -691,7 +775,10 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_LEFT_BACK);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		if (!bCombat) sprite->changeAnimation(ENFUNDA_LEFT);
 		break;
 
@@ -701,32 +788,47 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(AMOVE_RIGHT_BACK);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(BLOCK_RIGHT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) sprite->changeAnimation(ENFUNDA_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		if (!bCombat) sprite->changeAnimation(ENFUNDA_RIGHT);
 		break;
 
 	case AMOVE_LEFT_FORWARD:
 		posPlayer.x -= 1;
 		if (sprite->animFinished() || map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case AMOVE_RIGHT_FORWARD:
 		posPlayer.x += 1;
 		if (sprite->animFinished() || map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case AMOVE_LEFT_BACK:
 		posPlayer.x += 1;
 		if (sprite->animFinished() || map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_LEFT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_LEFT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case AMOVE_RIGHT_BACK:
 		posPlayer.x -= 1;
 		if (sprite->animFinished() || map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(ENGARDE_RIGHT);
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(FALL_RIGHT);
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case BLOCK_LEFT:
@@ -756,6 +858,15 @@ void Player::update(int deltaTime)
 	case ENFUNDA_RIGHT:
 		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 		break;
+
+	case DEATHENEMY_LEFT:
+		if (sprite->animFinished()) sprite->changeAnimation(DEATHFALL_LEFT);
+		break;
+
+	case DEATHENEMY_RIGHT:
+		if (sprite->animFinished()) sprite->changeAnimation(DEATHFALL_RIGHT);
+		break;
+
 	}
 
 	//faltarien uns bools o funcions per saber estats del attack del player
@@ -782,13 +893,18 @@ void Player::damage(int amount, string type) //aquest string es per saber quin t
 	hp = fmax(hp - amount, 0);
 	dead = hp == 0;
 	if (dead){
-/**		if (type == "PINXO"){
-			//animació mort per pinxos
+		if (type == "PINXO"){
+			if (direction == "left") sprite->changeAnimation(DEATHPINX_LEFT);
+			else sprite->changeAnimation(DEATHPINX_RIGHT);
 		}
 		else if (type == "FALL"){
-			//animació mort per caiguda
+			if (direction == "left")sprite->changeAnimation(DEATHFALL_LEFT);
+			else sprite->changeAnimation(DEATHFALL_RIGHT);
 		}
-		else //animació mort per enemic**/
+		else {
+			if (direction == "left") sprite->changeAnimation(DEATHENEMY_LEFT);
+			else sprite->changeAnimation(DEATHENEMY_RIGHT);
+		}//animació mort per enemic**/
 
 	}
 }
@@ -805,7 +921,7 @@ bool Player::isDead()
 bool Player::isAttacking()
 {
 	int frame = sprite->getFrame();
-	return (frame == 5) && (sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT); //es pot afinar més amb els frames
+	return (frame == 5) && (sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT); 
 }
 
 bool Player::isAttackingLong()

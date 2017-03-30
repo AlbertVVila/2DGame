@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 3.9
+#define INIT_PLAYER_X_TILES 6
+#define INIT_PLAYER_Y_TILES 0
 
 #define NUM_VIZIERS 2
 #define NUM_TORCHS 23
@@ -201,8 +201,8 @@ void Scene::init()
 	viziers[0].setPosition(glm::vec2(320, 312));
 	viziers[1].setPosition(glm::vec2(320, 504));
 
-	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
-	//projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f, 0.f);
+	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
+	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f, 0.f);
 	currentTime = 0.0f;
 }
 
@@ -225,6 +225,10 @@ void Scene::update(int deltaTime)
 		clocks[i].update(deltaTime);
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].update(deltaTime);
+
+	int panelX = int((player->getPosition().x+32) / 320.f);
+	int panelY = int((player->getPosition().y+64) / 192.f);
+	projection = glm::ortho(panelX * 32.f * 10, panelX * 32.f * 10 + 32.f * 10, panelY * 64.f * 3 + 64.f * 3, panelY * 64.f * 3);
 }
 
 void Scene::render()
@@ -235,10 +239,6 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
-	/*if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
-	{
-		modelview = glm::translate(modelview, glm::vec3(10.f * 32, 0.f, 0.f));
-	}*/
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();

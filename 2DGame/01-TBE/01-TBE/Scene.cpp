@@ -97,9 +97,9 @@ void Scene::init()
 	torchs[15].setPosition(glm::vec2(1515, 341));
 	torchs[16].setPosition(glm::vec2(1547, 469));
 	torchs[17].setPosition(glm::vec2(1803, 469));
-	torchs[18].setPosition(glm::vec2(523, 469));
+	torchs[18].setPosition(glm::vec2(491, 469));
 	torchs[19].setPosition(glm::vec2(715, 469));
-	torchs[20].setPosition(glm::vec2(907, 533));
+	torchs[20].setPosition(glm::vec2(875, 533));
 	torchs[21].setPosition(glm::vec2(1099, 405));
 	torchs[22].setPosition(glm::vec2(1195, 405));
 
@@ -116,8 +116,8 @@ void Scene::init()
 		fallings[i].setPlayer(player);
 	}
 	fallings[0].setPosition(glm::vec2(224, 64));
-	fallings[1].setPosition(glm::vec2(576, 448));
-	fallings[2].setPosition(glm::vec2(608, 448));
+	fallings[1].setPosition(glm::vec2(544, 448));
+	fallings[2].setPosition(glm::vec2(576, 448));
 	fallings[3].setPosition(glm::vec2(288, 64));
 	fallings[4].setPosition(glm::vec2(352, 64));
 	fallings[5].setPosition(glm::vec2(832, 64));
@@ -128,8 +128,8 @@ void Scene::init()
 		spikes[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		spikes[i].setPlayer(player);
 	}
-	spikes[0].setPosition(glm::vec2(576, 576));
-	spikes[1].setPosition(glm::vec2(608, 576));
+	spikes[0].setPosition(glm::vec2(544, 576));
+	spikes[1].setPosition(glm::vec2(576, 576));
 	spikes[2].setPosition(glm::vec2(544, 192));
 	spikes[3].setPosition(glm::vec2(576, 192));
 	spikes[4].setPosition(glm::vec2(672, 192));

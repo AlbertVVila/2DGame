@@ -26,12 +26,12 @@ public:
 private:
 	glm::ivec2 tileMapDispl, posVizier;
 	Texture spritesheet;
-	Sprite *sprite;
+	Sprite *sprite, *star;
 	TileMap *map;
 	Player *player;
 	float health;
 	int frameant;
-	float cd, cd_damage;
+	float cd, cd_damage, cd_star;
 	bool bloked;
 };
 

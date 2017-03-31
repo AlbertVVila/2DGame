@@ -9,6 +9,7 @@
 #define ATTACK_RANGE 32 * 1 + 12	//distancia en que pot atacar al player
 #define COOLDOWN 500				//temps per fer la següent habilitat (attack o block)
 #define CD_DAMAGE 500				//temps per rebre el següent atac del player
+#define CD_STAR	100					//temps que dura l'estrella
 
 enum VizierAnims
 {
@@ -21,13 +22,26 @@ enum VizierAnims
 	DEAD_L, DEAD_R
 };
 
+enum StarAnims
+{
+	ON, OFF
+};
+
 
 void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/vizier.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
+	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(14);
+	star->setNumberAnimations(2);
+
+	star->setAnimationSpeed(ON, 8);
+	star->addKeyframe(ON, glm::vec2(0.8f, 0.0f));
+
+	star->setAnimationSpeed(OFF, 8);
+	star->addKeyframe(OFF, glm::vec2(0.9f, 0.0f));
 
 	sprite->setAnimationSpeed(STAND_L, 8);
 	sprite->addKeyframe(STAND_L, glm::vec2(0.6f, 0.25f));
@@ -105,13 +119,15 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 
 	sprite->changeAnimation(STAND_L);
+	star->changeAnimation(OFF);
 	frameant = 0;
 	health = 3;
 	cd_damage = 0;
+	cd_star = 0;
 	bloked = false;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
-
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }
 
 void Vizier::update(int deltaTime)
@@ -203,23 +219,29 @@ void Vizier::update(int deltaTime)
 		break;
 	}
 
-	if (player->isAttacking() && cd_damage >= CD_DAMAGE && anim!=BLOCK_L && anim!=BLOCK_R && attack)
+	if (player->isAttacking() && cd_damage >= CD_DAMAGE && anim!=BLOCK_L && anim!=BLOCK_R  && anim!=DEAD_L && anim!=DEAD_R && attack)
 	{
 		cd_damage = 0;
 		health -= 1;
+		star->changeAnimation(ON);
+		cd_star = 0;
 		//cd = -COOLDOWN;
 		//if (anim == ATTACK_L || anim == CD_L || anim == BLOCK_L) sprite->changeAnimation(CD_L);
 		//if (anim == ATTACK_R || anim == CD_R || anim == BLOCK_R) sprite->changeAnimation(CD_R);
 	}
 	else cd_damage += deltaTime;
-	
+	if (star->animation() == ON) cd_star += deltaTime;
+	if (star->animation() == ON && cd_star>=CD_STAR) star->changeAnimation(OFF);
+
 	frameant = frame;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }
 
 void Vizier::render()
 {
 	sprite->render();
+	star->render();
 }
 
 void Vizier::setTileMap(TileMap *tileMap)
@@ -236,4 +258,5 @@ void Vizier::setPosition(const glm::vec2 &pos)
 {
 	posVizier = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }

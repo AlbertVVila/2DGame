@@ -5,11 +5,10 @@
 #include "Vizier.h"
 #include "Game.h"
 
-#define TIME_A 2000
-#define VISION_RANGE 32 * 5
-#define ATTACK_RANGE 32 * 1 + 12
-#define COOLDOWN 500
-#define CD_DAMAGE 500
+#define VISION_RANGE 32 * 5			//distancia en que pot veure al player
+#define ATTACK_RANGE 32 * 1 + 12	//distancia en que pot atacar al player
+#define COOLDOWN 500				//temps per fer la següent habilitat (attack o block)
+#define CD_DAMAGE 500				//temps per rebre el següent atac del player
 
 enum VizierAnims
 {
@@ -127,19 +126,16 @@ void Vizier::update(int deltaTime)
 	bool chase = py == vy && abs(px - vx) < VISION_RANGE && abs(px - vx) > ATTACK_RANGE;
 	bool outsight = (py != vy || abs(px - vx) >= VISION_RANGE);
 	bool attack = py == vy && abs(px - vx) <= ATTACK_RANGE;
-	bool block = false;
 
 	switch (anim)
 	{
 	case STAND_L:
-		if (health == 0) sprite->changeAnimation(DIE_L);
-		else if (px > vx) sprite->changeAnimation(STAND_R);
+		if (px > vx) sprite->changeAnimation(STAND_R);
 		else if (chase) { player->setCombat(true); sprite->changeAnimation(WALK_L); }
 		else if (attack) { player->setCombat(true); sprite->changeAnimation(ATTACK_L); }
 		break;
 	case STAND_R:
-		if (health == 0) sprite->changeAnimation(DIE_R);
-		else if (px < vx) sprite->changeAnimation(STAND_L);
+		if (px < vx) sprite->changeAnimation(STAND_L);
 		else if (chase) { player->setCombat(true); sprite->changeAnimation(WALK_R); }
 		else if (attack) { player->setCombat(true); sprite->changeAnimation(ATTACK_R); }
 		break;
@@ -153,7 +149,7 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x -= 4;
 		else if (frameant == 3 && frame == 4) posVizier.x += 13;
 		else if (frameant == 4 && frame == 5) posVizier.x += 2;
-		if (frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1,"enemy");
+		if (frameant == 2 && frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
 		break;
 	case ATTACK_R:
 		if (health == 0) sprite->changeAnimation(DIE_R);
@@ -165,7 +161,7 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x += 4;
 		else if (frameant == 3 && frame == 4) posVizier.x -= 13;
 		else if (frameant == 4 && frame == 5) posVizier.x -= 2;
-		if (frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
+		if (frameant == 2 && frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
 		break;
 	case CD_L:
 		cd += deltaTime;
@@ -216,7 +212,7 @@ void Vizier::update(int deltaTime)
 		//if (anim == ATTACK_R || anim == CD_R || anim == BLOCK_R) sprite->changeAnimation(CD_R);
 	}
 	else cd_damage += deltaTime;
-
+	
 	frameant = frame;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }

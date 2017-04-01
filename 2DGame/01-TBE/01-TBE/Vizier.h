@@ -25,8 +25,8 @@ public:
 
 private:
 	glm::ivec2 tileMapDispl, posVizier;
-	Texture spritesheet;
-	Sprite *sprite, *star;
+	Texture spritesheet, lifesheet;
+	Sprite *sprite, *star, *life;
 	TileMap *map;
 	Player *player;
 	float health;

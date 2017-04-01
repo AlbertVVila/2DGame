@@ -27,21 +27,45 @@ enum StarAnims
 	ON, OFF
 };
 
+enum LifeAnims
+{
+	FULL, HALFUP, HALFDOWN, NONE
+};
+
 
 void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/vizier.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
-	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(14);
+
+	lifesheet.setWrapS(GL_MIRRORED_REPEAT);
+	lifesheet.loadFromFile("images/vizier_life_sprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	life = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 1), &lifesheet, &shaderProgram);
+	life->setNumberAnimations(4);
+
+	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.25), &spritesheet, &shaderProgram);
 	star->setNumberAnimations(2);
+
 
 	star->setAnimationSpeed(ON, 8);
 	star->addKeyframe(ON, glm::vec2(0.8f, 0.0f));
 
 	star->setAnimationSpeed(OFF, 8);
 	star->addKeyframe(OFF, glm::vec2(0.9f, 0.0f));
+
+	life->setAnimationSpeed(FULL, 8);
+	life->addKeyframe(FULL, glm::vec2(0.0f, 0.0f));
+
+	life->setAnimationSpeed(HALFUP, 8);
+	life->addKeyframe(HALFUP, glm::vec2(0.1f, 0.0f));
+
+	life->setAnimationSpeed(HALFDOWN, 8);
+	life->addKeyframe(HALFDOWN, glm::vec2(0.2f, 0.0f));
+
+	life->setAnimationSpeed(NONE, 8);
+	life->addKeyframe(NONE, glm::vec2(0.3f, 0.0f));
 
 	sprite->setAnimationSpeed(STAND_L, 8);
 	sprite->addKeyframe(STAND_L, glm::vec2(0.6f, 0.25f));
@@ -120,6 +144,7 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	sprite->changeAnimation(STAND_L);
 	star->changeAnimation(OFF);
+	life->changeAnimation(FULL);
 	frameant = 0;
 	health = 3;
 	cd_damage = 0;
@@ -128,6 +153,7 @@ void Vizier::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
+	life->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }
 
 void Vizier::update(int deltaTime)
@@ -223,6 +249,9 @@ void Vizier::update(int deltaTime)
 	{
 		cd_damage = 0;
 		health -= 1;
+		if (life->animation() == FULL ) life->changeAnimation(HALFUP);
+		else if (life->animation() == HALFUP) life->changeAnimation(HALFDOWN);
+		else if (life->animation() == HALFDOWN) life->changeAnimation(NONE);
 		star->changeAnimation(ON);
 		cd_star = 0;
 		//cd = -COOLDOWN;
@@ -236,12 +265,14 @@ void Vizier::update(int deltaTime)
 	frameant = frame;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
+	life->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }
 
 void Vizier::render()
 {
 	sprite->render();
 	star->render();
+	life->render();
 }
 
 void Vizier::setTileMap(TileMap *tileMap)
@@ -259,4 +290,5 @@ void Vizier::setPosition(const glm::vec2 &pos)
 	posVizier = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 	star->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
+	life->setPosition(glm::vec2(float(tileMapDispl.x + posVizier.x), float(tileMapDispl.y + posVizier.y)));
 }

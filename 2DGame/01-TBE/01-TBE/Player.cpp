@@ -995,6 +995,12 @@ void Player::getPotion()
 	if (hp > 3) hp = 3;
 }
 
+void Player::changeDirection()
+{
+	if (sprite->animation() == AMOVE_LEFT_FORWARD) sprite->changeAnimation(AMOVE_RIGHT_BACK);
+	if (sprite->animation() == AMOVE_RIGHT_FORWARD) sprite->changeAnimation(AMOVE_LEFT_BACK);
+}
+
 
 
 

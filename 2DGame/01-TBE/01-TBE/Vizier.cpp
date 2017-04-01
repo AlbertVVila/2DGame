@@ -183,7 +183,7 @@ void Vizier::update(int deltaTime)
 		break;
 	case ATTACK_L:
 		if (health == 0) sprite->changeAnimation(DIE_L);
-		else if (px > vx) sprite->changeAnimation(STAND_R);
+		else if (px > vx) { sprite->changeAnimation(STAND_R); player->changeDirection(); }
 		else if (chase) sprite->changeAnimation(STAND_L);
 		else if (outsight) { player->setCombat(false); sprite->changeAnimation(STAND_L); }
 		else if (sprite->animFinished()) { cd = 0; sprite->changeAnimation(CD_L); }
@@ -195,7 +195,7 @@ void Vizier::update(int deltaTime)
 		break;
 	case ATTACK_R:
 		if (health == 0) sprite->changeAnimation(DIE_R);
-		else if (px < vx) sprite->changeAnimation(STAND_L);
+		else if (px < vx) { sprite->changeAnimation(STAND_L); player->changeDirection(); }
 		else if (chase) sprite->changeAnimation(STAND_R);
 		else if (outsight) { player->setCombat(false); sprite->changeAnimation(STAND_R); }
 		else if (sprite->animFinished()) { cd = 0; sprite->changeAnimation(CD_R); }

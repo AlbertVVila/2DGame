@@ -31,6 +31,7 @@ public:
 	void setCombat(bool combat);
 	void getSword();
 	void getPotion();
+	void changeDirection();
 
 private:
 	bool bCombat, dead;

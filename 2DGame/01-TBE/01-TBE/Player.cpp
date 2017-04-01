@@ -15,13 +15,13 @@
 
 enum PlayerAnims
 {
-	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL,SLOW_LEFT,SLOW_RIGHT,START_LEFT, START_RIGHT,MOVE_LEFT, MOVE_RIGHT, STOP_LEFT , STOP_RIGHT, 
-	JUMP_LEFT, JUMP_RIGHT,JUMP_LEFT_FAIL, JUMP_RIGHT_FAIL, JUMP_LEFT_CATCH, JUMP_RIGHT_CATCH, JUMP_LEFT_SUCCESS, JUMP_RIGHT_SUCCESS,
-	SJUMP_LEFT_START, SJUMP_RIGHT_START, SJUMP_LEFT_END, SJUMP_RIGHT_END, RJUMP_LEFT_START, RJUMP_RIGHT_START, RJUMP_LEFT_END, RJUMP_RIGHT_END, 
+	STAND_LEFT, STAND_RIGHT, STANDLR, STANDRL, SLOW_LEFT, SLOW_RIGHT, START_LEFT, START_RIGHT, MOVE_LEFT, MOVE_RIGHT, STOP_LEFT, STOP_RIGHT,
+	JUMP_LEFT, JUMP_RIGHT, JUMP_LEFT_FAIL, JUMP_RIGHT_FAIL, JUMP_LEFT_CATCH, JUMP_RIGHT_CATCH, JUMP_LEFT_SUCCESS, JUMP_RIGHT_SUCCESS,
+	SJUMP_LEFT_START, SJUMP_RIGHT_START, SJUMP_LEFT_END, SJUMP_RIGHT_END, RJUMP_LEFT_START, RJUMP_RIGHT_START, RJUMP_LEFT_END, RJUMP_RIGHT_END,
 	FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT, STAND_UP_RIGHT,
 	DESENFUNDA_LEFT, DESENFUNDA_RIGHT, ENFUNDA_LEFT, ENFUNDA_RIGHT, ATTACK_LEFT, ATTACK_RIGHT, BLOCK_LEFT, BLOCK_RIGHT, ENGARDE_LEFT, ENGARDE_RIGHT,
 	AMOVE_LEFT_FORWARD, AMOVE_LEFT_BACK, AMOVE_RIGHT_FORWARD, AMOVE_RIGHT_BACK, DEATHPINX_LEFT, DEATHPINX_RIGHT, DEATHENEMY_LEFT, DEATHENEMY_RIGHT,
-	DEATHFALL_LEFT,DEATHFALL_RIGHT
+	DEATHFALL_LEFT, DEATHFALL_RIGHT, DRINK_LEFT, DRINK_RIGHT
 };
 
 enum StarAnims
@@ -35,12 +35,13 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	bCombat = false;
 	hp = 3;
 	dead = false;
+	bPotionInRange = false;
 	falldist = 0;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
 	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(54);
+	sprite->setNumberAnimations(56);
 	star->setNumberAnimations(2);
 
 	star->setAnimationSpeed(ON, 8);
@@ -474,7 +475,43 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->setAnimationSpeed(DEATHFALL_RIGHT, 8);
 	sprite->addKeyframe(DEATHFALL_RIGHT, glm::vec2(-0.4f, 0.75f));
 
+	sprite->setAnimationSpeed(DRINK_LEFT, 8);
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.4f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.5f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.6f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.7f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.8f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.9f, 0.75f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.1f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.2f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.3f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.4f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.5f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.6f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.7f, 0.8f));
+	sprite->addKeyframe(DRINK_LEFT, glm::vec2(0.8f, 0.8f));
+
+	sprite->setAnimationSpeed(DRINK_RIGHT, 8);
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.5f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.6f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.7f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.8f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.9f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-1.f, 0.75f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.1F, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.2f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.3f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.4f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.5f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.6f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.7f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.8f, 0.8f));
+	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.9f, 0.8f));
+
+
 	sprite->changeAnimation(0);
+	direction = "right";
 	star->changeAnimation(OFF);
 	teEspasa = true;
 	cd_star = 0;
@@ -490,7 +527,7 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	int frame = sprite->getFrame();
 	int s = sprite->animation();
-	direction = s % 2 == 0 ? "left" : "right";
+	direction = s%2? "right":"left";
 	switch (s){
 	case STAND_LEFT:
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && Game::instance().getSpecialKey(112) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(SLOW_LEFT);
@@ -498,6 +535,10 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STANDLR);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_LEFT);
 		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
+		if (bPotionInRange && direction == potionDir && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+			sprite->changeAnimation(DRINK_LEFT);
+			this->heal(1);
+		}
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 			sprite->changeAnimation(FALL_LEFT);
 			falldist = posPlayer.y;
@@ -511,6 +552,10 @@ void Player::update(int deltaTime)
 			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
 			if (bCombat) sprite->changeAnimation(DESENFUNDA_RIGHT);
+			if (bPotionInRange && direction == potionDir && Game::instance().getSpecialKey(GLUT_KEY_DOWN)){
+				sprite->changeAnimation(DRINK_RIGHT);
+				this->heal(1);
+			}
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 				sprite->changeAnimation(FALL_RIGHT);
 				falldist = posPlayer.y;
@@ -893,7 +938,12 @@ void Player::update(int deltaTime)
 	case DEATHENEMY_RIGHT:
 		if (sprite->animFinished()) sprite->changeAnimation(DEATHFALL_RIGHT);
 		break;
-
+	case DRINK_LEFT:
+		if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
+		break;
+	case DRINK_RIGHT:
+		if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
+		break;
 	}
 
 	if (star->animation() == ON) cd_star += deltaTime;
@@ -965,6 +1015,11 @@ bool Player::isAttackingLong()
 	return sprite->animation() == ATTACK_LEFT || sprite->animation() == ATTACK_RIGHT;
 }
 
+bool Player::isDrinking()
+{
+	return sprite->animation() == DRINK_LEFT || sprite->animation() == DRINK_RIGHT;
+}
+
 bool Player::isBlocking()
 {
 	return sprite->animation() == BLOCK_LEFT || sprite->animation() == BLOCK_RIGHT;
@@ -991,11 +1046,11 @@ void Player::getSword()
 	
 }
 
-void Player::getPotion()
-{
-	hp += 1;
-	if (hp > 3) hp = 3;
+void Player::setPotionInRange(bool inRange, string dir){
+	bPotionInRange = inRange;
+	potionDir = dir;
 }
+
 
 void Player::changeDirection()
 {

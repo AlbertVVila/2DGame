@@ -21,6 +21,7 @@ public:
 	glm::vec2 getPosition();
 	int getHP();
 	bool isDead();
+	bool isDrinking();
 	bool isAttacking();
 	bool isAttackingLong();
 	bool isBlocking();
@@ -30,11 +31,12 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	void setCombat(bool combat);
 	void getSword();
-	void getPotion();
+	void setPotionInRange(bool inRange, string dir);
 	void changeDirection();
 
 private:
-	bool bCombat, dead;
+	bool bCombat, dead, bPotionInRange;
+	string potionDir;
 	string direction;
 	int falldist;
 	int hp;

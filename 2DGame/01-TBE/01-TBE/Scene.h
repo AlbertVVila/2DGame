@@ -14,6 +14,7 @@
 #include "Button.h"
 #include "Sword.h"
 #include "Clock.h"
+#include "Potion.h"
 
 #define CAMERA_WIDTH 60*32	
 #define CAMERA_HEIGHT 12*64
@@ -48,6 +49,7 @@ private:
 	Button *buttons;
 	Sword *sword;
 	Clock *clocks;
+	Potion *potions;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;

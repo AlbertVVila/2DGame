@@ -19,6 +19,7 @@
 #define NUM_DOORS 5
 #define NUM_BUTTONS 5
 #define NUM_CLOCKS 2
+#define NUM_POTIONS 1
 
 Scene::Scene()
 {
@@ -32,6 +33,7 @@ Scene::Scene()
 	buttons = NULL;
 	sword = NULL;
 	clocks = NULL;
+	potions = NULL;
 	player = NULL;
 	viziers = NULL;
 	other_column_front = NULL;
@@ -59,6 +61,8 @@ Scene::~Scene()
 		delete sword;
 	if (clocks != NULL)
 		delete clocks;
+	if (potions != NULL)
+		delete potions;
 	if (viziers != NULL)
 		delete viziers;
 	if (player != NULL)
@@ -179,6 +183,14 @@ void Scene::init()
 	sword->setPlayer(player);
 	sword->setPosition(glm::vec2(1738,576));
 
+	potions = new Potion[NUM_POTIONS];
+	for (int i = 0; i < NUM_POTIONS; i++)
+	{
+		potions[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		potions[i].setPlayer(player);
+	}
+	potions[0].setPosition(glm::vec2(490, 384));
+
 	clocks = new Clock[NUM_CLOCKS];
 	for (int i = 0; i < NUM_CLOCKS; i++)
 	{
@@ -225,6 +237,8 @@ void Scene::update(int deltaTime)
 	sword->update(deltaTime);
 	for (int i = 0; i < NUM_CLOCKS; i++)
 		clocks[i].update(deltaTime);
+	for (int i = 0; i < NUM_POTIONS; i++)
+		potions[i].update(deltaTime);
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].update(deltaTime);
 
@@ -259,6 +273,8 @@ void Scene::render()
 	sword->render();
 	for (int i = 0; i < NUM_CLOCKS; i++)
 		clocks[i].render();
+	for (int i = 0; i < NUM_POTIONS; i++)
+		potions[i].render();
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].render();
 	player->render();

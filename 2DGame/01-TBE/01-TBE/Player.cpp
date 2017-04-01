@@ -989,6 +989,12 @@ void Player::getSword()
 	
 }
 
+void Player::getPotion()
+{
+	hp += 1;
+	if (hp > 3) hp = 3;
+}
+
 
 
 

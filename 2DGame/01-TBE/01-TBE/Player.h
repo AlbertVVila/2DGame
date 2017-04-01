@@ -30,6 +30,7 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	void setCombat(bool combat);
 	void getSword();
+	void getPotion();
 
 private:
 	bool bCombat, dead;

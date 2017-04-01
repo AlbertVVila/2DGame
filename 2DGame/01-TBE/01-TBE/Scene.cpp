@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 13
-#define INIT_PLAYER_Y_TILES 5.9
+#define INIT_PLAYER_X_TILES 30
+#define INIT_PLAYER_Y_TILES 6.9
 
 #define NUM_VIZIERS 2
 #define NUM_TORCHS 23
@@ -147,8 +147,10 @@ void Scene::init()
 	spikes[13].setPosition(glm::vec2(1568, 64));
 
 	doors = new Door[NUM_DOORS];
-	for (int i = 0; i < NUM_DOORS; i++)
+	for (int i = 0; i < NUM_DOORS; i++){
 		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		doors[i].setTileMap(ground_wall);
+	}
 	doors[0].setPosition(glm::vec2(448, 64));
 	doors[1].setPosition(glm::vec2(1120, 448));
 	doors[2].setPosition(glm::vec2(1120, 0));

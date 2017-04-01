@@ -56,11 +56,13 @@ void Door::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 void Door::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-
-	if (sprite->animation() == GOUP && sprite->animFinished())
+	if (sprite->animation() == GOUP)
 	{
-		sprite->changeAnimation(UP);
-		opened = 0;
+		if (sprite->getFrame()==2)map->deleteTrapCollider(tileMapDispl.x + posDoor.x, tileMapDispl.y + posDoor.y);
+		else if (sprite->animFinished()){
+				sprite->changeAnimation(UP);
+				opened = 0;
+		}
 	}
 	if (sprite->animation() == UP)
 	{
@@ -68,8 +70,12 @@ void Door::update(int deltaTime)
 		if (opened >= timeOpened)
 			sprite->changeAnimation(GODOWN);
 	}
-	if (sprite->animation() == GODOWN && sprite->animFinished())
-		sprite->changeAnimation(DOWN);
+	if (sprite->animation() == GODOWN){
+		if (sprite->getFrame()==2) map->newTrapCollider(tileMapDispl.x + posDoor.x, tileMapDispl.y + posDoor.y, 2);
+		else if (sprite->animFinished()){
+			sprite->changeAnimation(DOWN);
+		}
+	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
 }
@@ -94,6 +100,7 @@ void Door::setPosition(const glm::vec2 &pos)
 {
 	posDoor = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
+	map->newTrapCollider(tileMapDispl.x + posDoor.x, tileMapDispl.y + posDoor.y, 2);
 }
 
 void Door::setTimeOpened(int time)

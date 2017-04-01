@@ -561,6 +561,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_LEFT);
 			falldist = posPlayer.y;
 		}
+		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
 
 		break;
 
@@ -573,6 +574,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_RIGHT);
 			falldist = posPlayer.y;
 		}
+		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
 		break;
 
 	case STOP_LEFT:

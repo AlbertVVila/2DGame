@@ -170,6 +170,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 			return true;
 			}
 		}
+	if (maptrap[y0*mapSize.x + x] == 2 && tileSizeWidth*x + 10 > pos.x) return true;
 	return false;
 }
 
@@ -183,6 +184,9 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 		//dibuixa sprite per sobre
 		if (tileSizeWidth*x-30< pos.x)
 			return true;
+	}
+	if (maptrap[y0*mapSize.x + x] == 2 && tileSizeWidth*x-10< pos.x){
+		return true;
 	}
 	return false;
 }

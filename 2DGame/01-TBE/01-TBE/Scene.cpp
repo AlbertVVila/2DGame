@@ -36,6 +36,7 @@ Scene::Scene()
 	clocks = NULL;
 	potions = NULL;
 	player = NULL;
+	life = NULL;
 	viziers = NULL;
 	fats = NULL;
 	other_column_front = NULL;
@@ -71,6 +72,8 @@ Scene::~Scene()
 		delete fats;
 	if (player != NULL)
 		delete player;
+	if (life != NULL)
+		delete life;
 	if (other_column_front != NULL)
 		delete other_column_front;
 }
@@ -227,8 +230,13 @@ void Scene::init()
 	}
 	fats[0].setPosition(glm::vec2(800, 440));
 
+	life = new Life();
+	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	life->setPlayer(player);
+	life->setPosition(glm::vec2(0, 0));
+
 	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
-	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f, 0.f);
+	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f + 14, 0.f);
 	currentTime = 0.0f;
 }
 
@@ -261,7 +269,9 @@ void Scene::update(int deltaTime)
 
 	int panelX = int((player->getPosition().x+32) / 320.f);
 	int panelY = int((player->getPosition().y+64) / 192.f);
-	projection = glm::ortho(panelX * 32.f * 10, panelX * 32.f * 10 + 32.f * 10, panelY * 64.f * 3 + 64.f * 3, panelY * 64.f * 3);
+	life->setPosition(glm::vec2(panelX * 32.f * 10, panelY * 64.f * 3 + 135));
+	life->update(deltaTime);
+	projection = glm::ortho(panelX * 32.f * 10, panelX * 32.f * 10 + 32.f * 10, panelY * 64.f * 3 + 64.f * 3 + 7, panelY * 64.f * 3);
 }
 
 void Scene::render()
@@ -298,6 +308,7 @@ void Scene::render()
 		fats[i].render();
 	player->render();
 	other_column_front->render();
+	life->render();
 }
 
 void Scene::initShaders()

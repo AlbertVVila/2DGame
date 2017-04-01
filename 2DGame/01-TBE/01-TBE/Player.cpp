@@ -857,11 +857,11 @@ void Player::update(int deltaTime)
 		break;
 
 	case BLOCK_LEFT:
-		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_LEFT);
+		if (sprite->animFinished() && !Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(ENGARDE_LEFT);
 		break;
 
 	case BLOCK_RIGHT:
-		if (sprite->animFinished()) sprite->changeAnimation(ENGARDE_RIGHT);
+		if (sprite->animFinished() && !Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(ENGARDE_RIGHT);
 		break;
 
 	case ATTACK_LEFT:

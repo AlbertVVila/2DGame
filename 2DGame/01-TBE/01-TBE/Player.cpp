@@ -9,7 +9,7 @@
 #define JUMP_ANGLE_STEP 1
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
-#define MAX_LIFE 4
+#define MAX_LIFE 3
 #define CD_STAR	100	
 
 
@@ -1024,6 +1024,18 @@ bool Player::isBlocking()
 {
 	return sprite->animation() == BLOCK_LEFT || sprite->animation() == BLOCK_RIGHT;
 }
+
+bool Player::isSlow()
+{
+	return sprite->animation() == SLOW_LEFT || sprite->animation() == SLOW_RIGHT;
+}
+
+bool Player::isJumping()
+{
+	return sprite->animation() == SJUMP_LEFT_START || sprite->animation() == SJUMP_RIGHT_START
+		|| sprite->animation() == RJUMP_LEFT_START || sprite->animation() == RJUMP_RIGHT_START;
+}
+
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;

@@ -38,15 +38,7 @@ void Button::update(int deltaTime)
 	int by = posButton.y;
 	int anim = sprite->animation();
 
-	if (sprite->animation() == DOWN && Game::instance().getSpecialKey(GLUT_KEY_F3))
-		sprite->changeAnimation(UP);
-	if (sprite->animation() == UP && Game::instance().getSpecialKey(GLUT_KEY_F4))
-	{
-		sprite->changeAnimation(DOWN);
-		door->open();
-	}
-
-	if (anim == UP && (py == by - 8) && (px - bx) >= -27 && (px - bx) < 15)
+	if (anim == UP && (py == by - 8) && (px - bx) >= -27 && (px - bx) < 15 && !player->isJumping())
 	{
 		sprite->changeAnimation(DOWN);
 		door->open();

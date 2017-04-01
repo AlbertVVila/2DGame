@@ -25,6 +25,8 @@ public:
 	bool isAttacking();
 	bool isAttackingLong();
 	bool isBlocking();
+	bool isSlow();
+	bool isJumping();
 	void damage(int amount, string type);
 	void heal(int amount);
 	void setTileMap(TileMap *tileMap);

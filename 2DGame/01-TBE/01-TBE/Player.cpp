@@ -10,6 +10,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 #define MAX_LIFE 4
+#define CD_STAR	100	
 
 
 enum PlayerAnims
@@ -23,6 +24,11 @@ enum PlayerAnims
 	DEATHFALL_LEFT,DEATHFALL_RIGHT
 };
 
+enum StarAnims
+{
+	ON, OFF
+};
+
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
@@ -33,7 +39,15 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
+	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(54);
+	star->setNumberAnimations(2);
+
+	star->setAnimationSpeed(ON, 8);
+	star->addKeyframe(ON, glm::vec2(0.9f, 0.8f));
+
+	star->setAnimationSpeed(OFF, 8);
+	star->addKeyframe(OFF, glm::vec2(0.9f, 0.85f));
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -461,9 +475,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(DEATHFALL_RIGHT, glm::vec2(-0.4f, 0.75f));
 
 	sprite->changeAnimation(0);
+	star->changeAnimation(OFF);
 	teEspasa = true;
+	cd_star = 0;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x+posPlayer.x), float(tileMapDispl.y+posPlayer.y)));
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
 }
 
@@ -877,13 +894,18 @@ void Player::update(int deltaTime)
 
 	}
 
+	if (star->animation() == ON) cd_star += deltaTime;
+	if (star->animation() == ON && cd_star >= CD_STAR) star->changeAnimation(OFF);
+
 	//faltarien uns bools o funcions per saber estats del attack del player
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::render()
 {
 	sprite->render();
+	star->render();
 }
 
 glm::vec2 Player::getPosition()
@@ -898,6 +920,10 @@ int Player::getHP()
 
 void Player::damage(int amount, string type) //aquest string es per saber quin tipus d'animació de mort farem
 {
+	if (type == "enemy") {
+		cd_star = 0;
+		star->changeAnimation(ON);
+	}
 	hp = fmax(hp - amount, 0);
 	dead = hp == 0;
 	if (dead){
@@ -950,6 +976,7 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	star->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::setCombat(bool combat)

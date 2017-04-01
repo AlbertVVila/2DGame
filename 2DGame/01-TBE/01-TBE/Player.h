@@ -39,9 +39,10 @@ private:
 	glm::ivec2 tileMapDispl, posPlayer;
 	int jumpAngle, startY;
 	Texture spritesheet;
-	Sprite *sprite;
+	Sprite *sprite, *star;
 	TileMap *map;
 	bool teEspasa;
+	float cd_star;
 
 };
 

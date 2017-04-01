@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 5
-#define INIT_PLAYER_Y_TILES 3.9
+#define INIT_PLAYER_X_TILES 13
+#define INIT_PLAYER_Y_TILES 5.9
 
 #define NUM_VIZIERS 2
 #define NUM_TORCHS 23

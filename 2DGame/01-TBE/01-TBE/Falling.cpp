@@ -57,12 +57,14 @@ void Falling::update(int deltaTime)
 	else if (sprite->animation() == FALLING)
 	{
 		time_shaking += deltaTime;
-		if (time_shaking >= SHAKE_TIME)
+		if (time_shaking >= SHAKE_TIME){
+			map->deleteTrapCollider(fx, fy);
 			posFalling.y += 4;
-		if (map->collisionMoveDown(posFalling, glm::ivec2(32, 64), &posFalling.y))
-		{
-			sprite->changeAnimation(FELL);
-			posFalling.y += 8;
+			if (map->collisionMoveDown(posFalling, glm::ivec2(32, 64), &posFalling.y))
+			{
+				sprite->changeAnimation(FELL);
+				posFalling.y += 8;
+			}
 		}
 	}
 
@@ -77,6 +79,7 @@ void Falling::render()
 void Falling::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;
+	
 }
 
 void Falling::setPlayer(Player *p)
@@ -88,4 +91,5 @@ void Falling::setPosition(const glm::vec2 &pos)
 {
 	posFalling = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posFalling.x), float(tileMapDispl.y + posFalling.y)));
+	map->newTrapCollider(tileMapDispl.x + posFalling.x, tileMapDispl.y + posFalling.y, 1);
 }

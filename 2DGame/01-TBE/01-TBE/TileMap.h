@@ -32,6 +32,8 @@ public:
 	bool JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
+	void newTrapCollider(int x, int y, int type);
+	void deleteTrapCollider(int x, int y);
 
 private:
 	bool loadLevel(const string &levelFile);
@@ -45,7 +47,7 @@ private:
 	int tileSizeWidth, tileSizeHeight, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int *map;
+	int *map,*maptrap;
 	ShaderProgram *shaderProgram;
 
 };

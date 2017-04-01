@@ -83,6 +83,8 @@ bool TileMap::loadLevel(const string &levelFile)
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
+	maptrap = new int[mapSize.x * mapSize.y];
+
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for (int i = 0; i < mapSize.x; i++)
@@ -218,7 +220,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSizeHeight;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y*mapSize.x + x] < 40 && map[y*mapSize.x + x] >= 20 && map[y*mapSize.x + x] != -1)
+		if (map[y*mapSize.x + x] < 40 && map[y*mapSize.x + x] >= 20 && map[y*mapSize.x + x] != -1
+			|| (maptrap[y*mapSize.x + x] == 1 && round((double)((pos.x + size.x / 2 - 1) / tileSizeWidth)) == x))
 		{
 			if (abs(*posY - tileSizeHeight * y- (7*tileSizeHeight/8) + size.y) <= 8)
 			{
@@ -230,6 +233,15 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	
 	return false;
 }
+
+void TileMap::newTrapCollider(int x, int y, int trampa) {
+	maptrap[(y / tileSizeHeight) * mapSize.x + (x /tileSizeWidth)] = trampa; 
+}
+
+void TileMap::deleteTrapCollider(int x, int y) {
+	maptrap[(y / tileSizeHeight) * mapSize.x + (x / tileSizeWidth)] = 0;
+}
+
 
 
 

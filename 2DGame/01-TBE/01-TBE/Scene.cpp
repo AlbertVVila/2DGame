@@ -13,6 +13,7 @@
 #define INIT_PLAYER_Y_TILES 5.9
 
 #define NUM_VIZIERS 2
+#define NUM_FATS 1
 #define NUM_TORCHS 23
 #define NUM_FALLINGS 6
 #define NUM_SPIKES 14
@@ -36,6 +37,7 @@ Scene::Scene()
 	potions = NULL;
 	player = NULL;
 	viziers = NULL;
+	fats = NULL;
 	other_column_front = NULL;
 }
 
@@ -65,6 +67,8 @@ Scene::~Scene()
 		delete potions;
 	if (viziers != NULL)
 		delete viziers;
+	if (fats != NULL)
+		delete fats;
 	if (player != NULL)
 		delete player;
 	if (other_column_front != NULL)
@@ -214,6 +218,15 @@ void Scene::init()
 	viziers[0].setPosition(glm::vec2(320, 312));
 	viziers[1].setPosition(glm::vec2(320, 504));
 
+	fats = new Fat[NUM_FATS];
+	for (int i = 0; i < NUM_FATS; i++)
+	{
+		fats[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		fats[i].setTileMap(ground_wall);
+		fats[i].setPlayer(player);
+	}
+	fats[0].setPosition(glm::vec2(800, 440));
+
 	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f, 0.f);
 	currentTime = 0.0f;
@@ -243,6 +256,8 @@ void Scene::update(int deltaTime)
 		potions[i].update(deltaTime);
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].update(deltaTime);
+	for (int i = 0; i < NUM_FATS; i++)
+		fats[i].update(deltaTime);
 
 	int panelX = int((player->getPosition().x+32) / 320.f);
 	int panelY = int((player->getPosition().y+64) / 192.f);
@@ -279,6 +294,8 @@ void Scene::render()
 		potions[i].render();
 	for (int i = 0; i < NUM_VIZIERS; i++)
 		viziers[i].render();
+	for (int i = 0; i < NUM_FATS; i++)
+		fats[i].render();
 	player->render();
 	other_column_front->render();
 }

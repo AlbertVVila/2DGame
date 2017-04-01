@@ -7,6 +7,7 @@
 #include "TileMap.h"
 #include "Player.h"
 #include "Vizier.h"
+#include "Fat.h"
 #include "Torch.h"
 #include "Falling.h"
 #include "Spikes.h"
@@ -42,6 +43,7 @@ private:
 	TileMap *background, *ground_wall, *other_column_back, *other_column_front;
 	Player *player;
 	Vizier *viziers;
+	Fat *fats;
 	Torch *torchs;
 	Falling *fallings;
 	Spikes *spikes;

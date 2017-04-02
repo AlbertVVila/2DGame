@@ -3,6 +3,7 @@
 
 
 #include "Scene.h"
+#include "Menu.h"
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
@@ -43,7 +44,8 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
-
+	Menu menu;
+	bool menuON;
 };
 
 

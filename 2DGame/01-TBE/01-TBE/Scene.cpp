@@ -9,18 +9,18 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 13
-#define INIT_PLAYER_Y_TILES 5.9
+#define INIT_PLAYER_X_TILES 34
+#define INIT_PLAYER_Y_TILES -1
 
 #define NUM_VIZIERS 2
-#define NUM_FATS 1
+#define NUM_FATS 0
 #define NUM_TORCHS 23
 #define NUM_FALLINGS 6
 #define NUM_SPIKES 14
 #define NUM_DOORS 5
 #define NUM_BUTTONS 5
 #define NUM_CLOCKS 2
-#define NUM_POTIONS 1
+#define NUM_POTIONS 2
 
 Scene::Scene()
 {
@@ -198,7 +198,8 @@ void Scene::init()
 		potions[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		potions[i].setPlayer(player);
 	}
-	potions[0].setPosition(glm::vec2(490, 384));
+	potions[0].setPosition(glm::vec2(32, 0));
+	potions[1].setPosition(glm::vec2(832, 576));
 
 	clocks = new Clock[NUM_CLOCKS];
 	for (int i = 0; i < NUM_CLOCKS; i++)
@@ -221,14 +222,14 @@ void Scene::init()
 	viziers[0].setPosition(glm::vec2(320, 312));
 	viziers[1].setPosition(glm::vec2(320, 504));
 
-	fats = new Fat[NUM_FATS];
+	/*fats = new Fat[NUM_FATS];
 	for (int i = 0; i < NUM_FATS; i++)
 	{
 		fats[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 		fats[i].setTileMap(ground_wall);
 		fats[i].setPlayer(player);
 	}
-	fats[0].setPosition(glm::vec2(800, 440));
+	fats[0].setPosition(glm::vec2(800, 440));*/
 
 	life = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -242,7 +243,7 @@ void Scene::init()
 
 void Scene::update(int deltaTime)
 {
-	if (player->isDead() && Game::instance().getKey(13)){ //enter key
+	if (Game::instance().getKey(13)){ //enter key
 		this->init();
 	}
 	currentTime += deltaTime;
@@ -267,7 +268,7 @@ void Scene::update(int deltaTime)
 	for (int i = 0; i < NUM_FATS; i++)
 		fats[i].update(deltaTime);
 
-	int panelX = int((player->getPosition().x+32) / 320.f);
+	int panelX = int((player->getPosition().x-1+32) / 320.f);
 	int panelY = int((player->getPosition().y+64) / 192.f);
 	life->setPosition(glm::vec2(panelX * 32.f * 10, panelY * 64.f * 3 + 135));
 	life->update(deltaTime);

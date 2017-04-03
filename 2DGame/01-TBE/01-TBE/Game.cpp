@@ -7,22 +7,25 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	menuON = true;
+	bmenu = true;
+	binit = false;
 	menu.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	if (menuON)
+	if (bmenu && !binit)
 	{
-		if (!menu.getMenuON())
+		if (!binit && menu.getBinit())
 		{
-			menuON = false;
+			binit = true;
 			scene.init();
 		}
 		bPlay = menu.getBplay();
 	}
-	if (menuON) menu.update(deltaTime);
+	if (binit) bmenu = menu.getBmenu();
+
+	if (bmenu) menu.update(deltaTime);
 	else scene.update(deltaTime);
 	
 	return bPlay;
@@ -31,7 +34,7 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (menuON) menu.render();
+	if (bmenu) menu.render();
 	else scene.render();
 }
 

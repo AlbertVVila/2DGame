@@ -41,14 +41,17 @@ void Potion::update(int deltaTime)
 
 	if (anim == DOWN && (py == sy - 8) && (px - sx) >= -26 && (px - sx) < 25)
 	{
-		player->setPotionInRange(true, px < sx + 5 ? "right" : "left");
+		if (player->isDrinking()){
+			player->setPotionInRange(false, px < sx + 5 ? "right" : "left");
+			sprite->changeAnimation(TAKEN);
+		}
+		else{
+			player->setPotionInRange(true, px < sx + 5 ? "right" : "left");
+		}
+	
 	}
-	else if (anim == DOWN){
+	else if (anim == DOWN && abs(px-sx)>25 && abs(px-sx)<50){
 		player->setPotionInRange(false, px < sx + 5 ? "right" : "left");
-	}
-	if (player->isDrinking()){
-		player->setPotionInRange(false, px < sx + 5 ? "right" : "left");
-		sprite->changeAnimation(TAKEN);
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPotion.x), float(tileMapDispl.y + posPotion.y)));

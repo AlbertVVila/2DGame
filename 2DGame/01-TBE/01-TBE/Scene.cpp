@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 34
-#define INIT_PLAYER_Y_TILES -1
+#define INIT_PLAYER_X_TILES 1
+#define INIT_PLAYER_Y_TILES 8.9
 
 #define NUM_VIZIERS 2
 #define NUM_FATS 0
@@ -82,10 +82,10 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	other_column_front = TileMap::createTileMap("levels/level1_4.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	background = TileMap::createTileMap("levels/level2_back.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	ground_wall = TileMap::createTileMap("levels/level2_ground.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_back = TileMap::createTileMap("levels/level2_back_col.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_front = TileMap::createTileMap("levels/level2_front_col.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	torchs = new Torch[NUM_TORCHS];
 	for (int i = 0; i < NUM_TORCHS; i++)
@@ -164,7 +164,7 @@ void Scene::init()
 	doors[3].setPosition(glm::vec2(1696, 320));
 	doors[4].setPosition(glm::vec2(1536, 448));
 
-	doors[0].setTimeOpened(10000);
+	doors[0].setTimeOpened(12000);
 	doors[1].setTimeOpened(5000);
 	doors[2].setTimeOpened(15000);
 	doors[3].setTimeOpened(25000);
@@ -268,11 +268,11 @@ void Scene::update(int deltaTime)
 	for (int i = 0; i < NUM_FATS; i++)
 		fats[i].update(deltaTime);
 
-	int panelX = int((player->getPosition().x-1+32) / 320.f);
+	int panelX = int((player->getPosition().x-4+32) / 320.f);
 	int panelY = int((player->getPosition().y+64) / 192.f);
 	life->setPosition(glm::vec2(panelX * 32.f * 10, panelY * 64.f * 3 + 135));
 	life->update(deltaTime);
-	projection = glm::ortho(panelX * 32.f * 10, panelX * 32.f * 10 + 32.f * 10, panelY * 64.f * 3 + 64.f * 3 + 7, panelY * 64.f * 3);
+	projection = glm::ortho(panelX * 32.f * 10, (panelX + 1) * 32.f * 10, (panelY + 1) * 64.f * 3 + 7, panelY * 64.f * 3);
 }
 
 void Scene::render()

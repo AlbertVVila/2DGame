@@ -28,7 +28,6 @@ void Menu::init()
 {
 	initShaders();
 	menuON = true;
-	initON = false;
 	bplay = true;
 
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
@@ -75,7 +74,7 @@ void Menu::update(int deltaTime)
 		switch (anim){
 		case OPT1:
 			if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) { cd = 0; sprite->changeAnimation(OPT2); }
-			else if (Game::instance().getKey(13)) { cd = 0; initON = true; sprite->changeAnimation(INIT); }
+			else if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(INIT); }
 			break;
 		case OPT2:
 			if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) { cd = 0; sprite->changeAnimation(OPT3); }
@@ -98,7 +97,7 @@ void Menu::update(int deltaTime)
 			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); }
 			break;
 		case INIT:
-			if (Game::instance().getKey(13)) { menuON = false; initON = false; }
+			if (Game::instance().getKey(13)) { cd = 0; menuON = false; }
 			break;
 		case END:
 			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); }
@@ -153,11 +152,6 @@ void Menu::initShaders()
 bool Menu::getBmenu()
 {
 	return menuON;
-}
-
-bool Menu::getBinit()
-{
-	return initON;
 }
 
 bool Menu::getBplay()

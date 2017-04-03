@@ -8,22 +8,19 @@ void Game::init()
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	bmenu = true;
-	binit = false;
 	menu.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	if (bmenu && !binit)
-	{
-		if (!binit && menu.getBinit())
-		{
-			binit = true;
+
+	if (bmenu){
+		if (!menu.getBmenu()) {
+			bmenu = false;
 			scene.init();
 		}
 		bPlay = menu.getBplay();
 	}
-	if (binit) bmenu = menu.getBmenu();
 
 	if (bmenu) menu.update(deltaTime);
 	else scene.update(deltaTime);

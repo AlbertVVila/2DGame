@@ -22,7 +22,6 @@ public:
 	void update(int deltaTime);
 	void render();
 	bool getBmenu();
-	bool getBinit();
 	bool getBplay();
 
 private:
@@ -33,7 +32,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	glm::mat4 projection;
-	bool menuON, initON, bplay;
+	bool menuON, bplay;
 	float cd;
 };
 

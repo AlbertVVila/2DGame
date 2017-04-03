@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 1
-#define INIT_PLAYER_Y_TILES 8.9
+#define INIT_PLAYER_X_TILES 34
+#define INIT_PLAYER_Y_TILES -1
 
 #define NUM_VIZIERS 2
 #define NUM_FATS 0
@@ -82,10 +82,10 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
-	background = TileMap::createTileMap("levels/level2_back.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	ground_wall = TileMap::createTileMap("levels/level2_ground.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	other_column_back = TileMap::createTileMap("levels/level2_back_col.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	other_column_front = TileMap::createTileMap("levels/level2_front_col.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	background = TileMap::createTileMap("levels/level1_1.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	ground_wall = TileMap::createTileMap("levels/level1_2.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_back = TileMap::createTileMap("levels/level1_3.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	other_column_front = TileMap::createTileMap("levels/level1_4.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 
 	torchs = new Torch[NUM_TORCHS];
 	for (int i = 0; i < NUM_TORCHS; i++)

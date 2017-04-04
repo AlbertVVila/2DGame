@@ -19,7 +19,7 @@
 #include "Life.h"
 
 #define CAMERA_WIDTH 60*32	
-#define CAMERA_HEIGHT 12*64
+#define CAMERA_HEIGHT 15*64
 
 
 // Scene contains all the entities of our game.
@@ -39,8 +39,13 @@ public:
 
 private:
 	void initShaders();
+	void initlevel1();
+	void initlevel2();
+	void changelevel(int level);
 
 private:
+	int ndoors, nfallings, nbuttons, npotions, nfats, nviziers,ntorchs, nspikes;
+	int currentlvl=1;
 	TileMap *background, *ground_wall, *other_column_back, *other_column_front;
 	Player *player;
 	Vizier *viziers;

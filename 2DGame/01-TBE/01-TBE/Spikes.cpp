@@ -59,7 +59,7 @@ void Spikes::update(int deltaTime)
 		player->damage(3,"PINXO");
 	}
 
-	if (anim == GOUP && sprite->animFinished())
+	if (anim == GOUP && sprite->animFinished() || Game::instance().getSpecialKey(GLUT_KEY_F10))
 	{
 		sprite->changeAnimation(UP);
 	}

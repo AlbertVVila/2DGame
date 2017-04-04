@@ -12,10 +12,10 @@ enum FallingAnims
 	IDLE, FALLING, FELL
 };
 
-void Falling::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Falling::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, string file)
 {
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
-	spritesheet.loadFromFile("images/falling_sprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile(file, TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 1), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(3);
 

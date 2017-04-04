@@ -36,6 +36,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	hp = 3;
 	dead = false;
 	bPotionInRange = false;
+	hasSword = false;
 	falldist = 0;
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -534,7 +535,7 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !map->collisionMoveLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_LEFT);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) sprite->changeAnimation(STANDLR);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_LEFT);
-		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
+		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_LEFT);
 		if (bPotionInRange && direction == potionDir && Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 			sprite->changeAnimation(DRINK_LEFT);
 			this->heal(1);
@@ -551,7 +552,7 @@ void Player::update(int deltaTime)
 			else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !map->collisionMoveRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(START_RIGHT);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) sprite->changeAnimation(STANDRL);
 			else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) sprite->changeAnimation(JUMP_RIGHT);
-			if (bCombat) sprite->changeAnimation(DESENFUNDA_RIGHT);
+			if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_RIGHT);
 			if (bPotionInRange && direction == potionDir && Game::instance().getSpecialKey(GLUT_KEY_DOWN)){
 				sprite->changeAnimation(DRINK_RIGHT);
 				this->heal(1);
@@ -606,7 +607,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_LEFT);
 			falldist = posPlayer.y;
 		}
-		if (bCombat) sprite->changeAnimation(DESENFUNDA_LEFT);
+		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_LEFT);
 
 		break;
 
@@ -619,7 +620,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_RIGHT);
 			falldist = posPlayer.y;
 		}
-		if (bCombat) sprite->changeAnimation(DESENFUNDA_RIGHT);
+		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_RIGHT);
 		break;
 
 	case STOP_LEFT:
@@ -652,6 +653,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_LEFT);
 			falldist = posPlayer.y;
 		}
+		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_LEFT);
 		break;
 
 	case SLOW_RIGHT:
@@ -663,6 +665,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(FALL_RIGHT);
 			falldist = posPlayer.y;
 		}
+		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_RIGHT);
 		break;
 
 	case JUMP_LEFT:
@@ -1055,7 +1058,8 @@ void Player::setCombat(bool combat)
 
 void Player::getSword()
 {
-	
+	sprite->changeAnimation(ENFUNDA_RIGHT);
+	hasSword = true;
 }
 
 void Player::setPotionInRange(bool inRange, string dir){

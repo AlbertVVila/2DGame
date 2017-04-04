@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 34
-#define INIT_PLAYER_Y_TILES -1
+#define INIT_PLAYER_X_TILES 53
+#define INIT_PLAYER_Y_TILES 9
 
 #define INIT_PLAYER_X_TILES2 2
 #define INIT_PLAYER_Y_TILES2 9.9
@@ -130,7 +130,6 @@ void Scene::initlevel1(){
 	torchs[20].setPosition(glm::vec2(875, 533));
 	torchs[21].setPosition(glm::vec2(1099, 405));
 	torchs[22].setPosition(glm::vec2(1195, 405));
-
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES * ground_wall->getTileSizeH()));
@@ -190,7 +189,7 @@ void Scene::initlevel1(){
 	buttons = new Button[NUM_BUTTONS];
 	for (int i = 0; i < NUM_BUTTONS; i++)
 	{
-		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/button_sprite.png");
 		buttons[i].setPlayer(player);
 	}
 	buttons[0].setPosition(glm::vec2(736, 128));
@@ -278,15 +277,16 @@ void Scene::initlevel2(){
 	torchs[22].setPosition(glm::vec2(45 * 32 + 10, 7 * 64 - 43));
 	torchs[23].setPosition(glm::vec2(17 * 32 + 10, 10 * 64 - 43));
 	torchs[24].setPosition(glm::vec2(14 * 32 + 10, 7 * 64 - 43));
-
-	player = new Player();
-	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	if (player == NULL){
+		player = new Player();
+		player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	}
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES2 * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES2 * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 	fallings = new Falling[NUM_FALLINGS2];
 	for (int i = 0; i < NUM_FALLINGS2; i++)
 	{
-		fallings[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/falling_sprite.png");
+		fallings[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/falling2.png");
 		fallings[i].setTileMap(ground_wall);
 		fallings[i].setPlayer(player);
 	}
@@ -357,7 +357,7 @@ void Scene::initlevel2(){
 	buttons = new Button[NUM_BUTTONS2];
 	for (int i = 0; i < NUM_BUTTONS2; i++)
 	{
-		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		buttons[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/button2.png");
 		buttons[i].setPlayer(player);
 	}
 	buttons[0].setPosition(glm::vec2(12 * 32, 4 * 64));

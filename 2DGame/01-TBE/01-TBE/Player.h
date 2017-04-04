@@ -37,7 +37,7 @@ public:
 	void changeDirection();
 
 private:
-	bool bCombat, dead, bPotionInRange;
+	bool bCombat, dead, bPotionInRange, hasSword;
 	string potionDir;
 	string direction;
 	int falldist;

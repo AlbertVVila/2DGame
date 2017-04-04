@@ -10,10 +10,10 @@ enum ButtonAnims
 	DOWN, UP
 };
 
-void Button::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
+void Button::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram, string file)
 {
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
-	spritesheet.loadFromFile("images/button_sprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile(file, TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 1), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 

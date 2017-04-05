@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Potion.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 enum PotionAnims
 {
@@ -44,6 +46,7 @@ void Potion::update(int deltaTime)
 		if (player->isDrinking()){
 			player->setPotionInRange(false, px < sx + 5 ? "right" : "left");
 			sprite->changeAnimation(TAKEN);
+			PlaySound(TEXT("music/potion.wav"), NULL, SND_ASYNC);
 		}
 		else{
 			player->setPotionInRange(true, px < sx + 5 ? "right" : "left");

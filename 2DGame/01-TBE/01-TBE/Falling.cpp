@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Falling.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 #define SHAKE_TIME 1000
 
@@ -44,15 +46,11 @@ void Falling::update(int deltaTime)
 	int fx = posFalling.x;
 	int fy = posFalling.y;
 
-	if (Game::instance().getSpecialKey(GLUT_KEY_F1))
+	if (sprite->animation() == IDLE && (py == fy - 8) && (px - fx) >= -27 && (px - fx) < 15)
 	{
 		sprite->changeAnimation(FALLING);
 		time_shaking = 0;
-	}
-	else if (sprite->animation() == IDLE && (py == fy - 8) && (px - fx) >= -27 && (px - fx) < 15)
-	{
-		sprite->changeAnimation(FALLING);
-		time_shaking = 0;
+		PlaySound(TEXT("music/falling_active.wav"), NULL, SND_ASYNC);
 	}
 	else if (sprite->animation() == FALLING)
 	{
@@ -64,6 +62,7 @@ void Falling::update(int deltaTime)
 			{
 				sprite->changeAnimation(FELL);
 				posFalling.y += 8;
+				PlaySound(TEXT("music/falling_fell.wav"), NULL, SND_ASYNC);
 			}
 		}
 	}

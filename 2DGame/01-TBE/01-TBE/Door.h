@@ -28,7 +28,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	int timeOpened;
-	float opened;
+	float opened, sound_cd;
 };
 
 

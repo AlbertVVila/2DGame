@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Spikes.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 enum SpikesAnims
 {
@@ -57,6 +59,7 @@ void Spikes::update(int deltaTime)
 	{
 		sprite->changeAnimation(GOUP);
 		player->damage(3,"PINXO");
+		PlaySound(TEXT("music/spikes.wav"), NULL, SND_ASYNC);
 	}
 
 	if (anim == GOUP && sprite->animFinished() || Game::instance().getSpecialKey(GLUT_KEY_F10))

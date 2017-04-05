@@ -5,6 +5,8 @@
 #include <GL/glut.h>
 #include "Menu.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 #define CD 200
 
@@ -29,6 +31,7 @@ void Menu::init()
 	initShaders();
 	menuON = true;
 	bplay = true;
+	song_cd = 25000;
 
 	spritesheet.setWrapS(GL_MIRRORED_REPEAT);
 	spritesheet.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -69,6 +72,9 @@ void Menu::init()
 void Menu::update(int deltaTime)
 {
 	int anim = sprite->animation();
+	if (anim != END && song_cd >= 25000) { song_cd = 0; PlaySound(TEXT("music/intro_theme.wav"), NULL, SND_ASYNC); }
+	if (anim == END && song_cd >= 115000) { song_cd = 0; PlaySound(TEXT("music/won.wav"), NULL, SND_ASYNC); }
+	else song_cd += deltaTime;
 	cd += deltaTime;
 	if (cd >= CD)
 		switch (anim){
@@ -97,7 +103,7 @@ void Menu::update(int deltaTime)
 			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); }
 			break;
 		case INIT:
-			if (Game::instance().getKey(13)) { cd = 0; menuON = false; }
+			if (Game::instance().getKey(13)) { cd = 0; menuON = false; PlaySound(NULL, NULL, SND_ASYNC); }
 			break;
 		case END:
 			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); }

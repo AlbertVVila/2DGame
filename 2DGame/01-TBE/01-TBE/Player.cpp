@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Player.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 
 #define JUMP_ANGLE_STEP 1
@@ -726,24 +728,36 @@ void Player::update(int deltaTime)
 
 	case FALL_LEFT:
 		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(STAND_UP_LEFT);
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(STAND_UP_LEFT);
+			PlaySound(TEXT("music/player_fell.wav"), NULL, SND_ASYNC);
+		}
 		else if (sprite->animFinished()) sprite->changeAnimation(FALLING_LEFT);
 		break;
 
 	case FALL_RIGHT:
 		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(STAND_UP_RIGHT);
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(STAND_UP_RIGHT);
+			PlaySound(TEXT("music/player_fell.wav"), NULL, SND_ASYNC);
+		}
 		else if (sprite->animFinished()) sprite->changeAnimation(FALLING_RIGHT);
 		break;
 
 	case FALLING_LEFT:
 		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(STAND_UP_LEFT);
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) {
+			sprite->changeAnimation(STAND_UP_LEFT);
+			PlaySound(TEXT("music/damage_fall.wav"), NULL, SND_ASYNC);
+		}
 		break;
 
 	case FALLING_RIGHT:
 		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)) sprite->changeAnimation(STAND_UP_RIGHT);
+		if (map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(STAND_UP_RIGHT);
+			PlaySound(TEXT("music/damage_fall.wav"), NULL, SND_ASYNC);
+		}
 		break;
 
 	case STAND_UP_LEFT:
@@ -987,9 +1001,11 @@ void Player::damage(int amount, string type) //aquest string es per saber quin t
 		cd_star = 0;
 		star->changeAnimation(ON);
 	}
+	PlaySound(TEXT("music/damage.wav"), NULL, SND_ASYNC);
 	hp = fmax(hp - amount, 0);
 	dead = hp == 0;
 	if (dead){
+		PlaySound(TEXT("music/fatality.wav"), NULL, SND_ASYNC);
 		if (type == "PINXO"){
 			if (direction == "left") sprite->changeAnimation(DEATHPINX_LEFT);
 			else sprite->changeAnimation(DEATHPINX_RIGHT);

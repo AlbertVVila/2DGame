@@ -33,7 +33,7 @@ private:
 	Sprite *sprite;
 	glm::mat4 projection;
 	bool menuON, bplay;
-	float cd;
+	float cd, song_cd;
 };
 
 

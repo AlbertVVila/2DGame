@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Vizier.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 #define VISION_RANGE 32 * 5			//distancia en que pot veure al player
 #define ATTACK_RANGE 32 * 1 + 12	//distancia en que pot atacar al player
@@ -191,7 +193,9 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x -= 4;
 		else if (frameant == 3 && frame == 4) posVizier.x += 13;
 		else if (frameant == 4 && frame == 5) posVizier.x += 2;
+		if (frameant == 1 && frame == 2 && !player->isDead()) PlaySound(TEXT("music/swing.wav"), NULL, SND_ASYNC);
 		if (frameant == 2 && frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
+		if (frameant == 2 && frame == 3 && player->isBlocking()) PlaySound(TEXT("music/block.wav"), NULL, SND_ASYNC);
 		break;
 	case ATTACK_R:
 		if (health == 0) sprite->changeAnimation(DIE_R);
@@ -203,7 +207,9 @@ void Vizier::update(int deltaTime)
 		else if (frameant == 2 && frame == 3) posVizier.x += 4;
 		else if (frameant == 3 && frame == 4) posVizier.x -= 13;
 		else if (frameant == 4 && frame == 5) posVizier.x -= 2;
+		if (frameant == 1 && frame == 2 && !player->isDead()) PlaySound(TEXT("music/swing.wav"), NULL, SND_ASYNC);
 		if (frameant == 2 && frame == 3 && !player->isBlocking() && !player->isDead()) player->damage(1, "enemy");
+		if (frameant == 2 && frame == 3 && player->isBlocking()) PlaySound(TEXT("music/block.wav"), NULL, SND_ASYNC);
 		break;
 	case CD_L:
 		cd += deltaTime;
@@ -254,9 +260,15 @@ void Vizier::update(int deltaTime)
 		else if (life->animation() == HALFDOWN) life->changeAnimation(NONE);
 		star->changeAnimation(ON);
 		cd_star = 0;
+		PlaySound(TEXT("music/enemy_damage.wav"), NULL, SND_ASYNC);
 		//cd = -COOLDOWN;
 		//if (anim == ATTACK_L || anim == CD_L || anim == BLOCK_L) sprite->changeAnimation(CD_L);
 		//if (anim == ATTACK_R || anim == CD_R || anim == BLOCK_R) sprite->changeAnimation(CD_R);
+	}
+	else if (player->isAttacking() && cd_damage >= CD_DAMAGE && (anim == BLOCK_L || anim == BLOCK_R)  && anim != DEAD_L && anim != DEAD_R && attack)
+	{
+		cd_damage = 0;
+		PlaySound(TEXT("music/block.wav"), NULL, SND_ASYNC);
 	}
 	else cd_damage += deltaTime;
 	if (star->animation() == ON) cd_star += deltaTime;

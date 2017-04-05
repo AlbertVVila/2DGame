@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Button.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 enum ButtonAnims
 {
@@ -42,6 +44,7 @@ void Button::update(int deltaTime)
 	{
 		sprite->changeAnimation(DOWN);
 		door->open();
+		PlaySound(TEXT("music/button.wav"), NULL, SND_ASYNC);
 	}
 	if (anim == DOWN && ((py != by - 8) || (px - bx) < -27 || (px - bx) >= 15))
 	{

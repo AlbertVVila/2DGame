@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Door.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 #define TIME_OPENED 5000
 
@@ -48,6 +50,7 @@ void Door::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	sprite->changeAnimation(0);
 	timeOpened = 5000;
+	sound_cd = 0;
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posDoor.x), float(tileMapDispl.y + posDoor.y)));
 
@@ -58,6 +61,8 @@ void Door::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (sprite->animation() == GOUP)
 	{
+		sound_cd += deltaTime;
+		if (sound_cd >= 200) { sound_cd = 0; PlaySound(TEXT("music/door_moving.wav"), NULL, SND_ASYNC); }
 		if (sprite->getFrame()==2)map->deleteTrapCollider(tileMapDispl.x + posDoor.x, tileMapDispl.y + posDoor.y);
 		else if (sprite->animFinished()){
 				sprite->changeAnimation(UP);
@@ -71,6 +76,8 @@ void Door::update(int deltaTime)
 			sprite->changeAnimation(GODOWN);
 	}
 	if (sprite->animation() == GODOWN){
+		sound_cd += deltaTime;
+		if (sound_cd >= 200) { sound_cd = 0; PlaySound(TEXT("music/door_moving.wav"), NULL, SND_ASYNC); }
 		if (sprite->getFrame()==2) map->newTrapCollider(tileMapDispl.x + posDoor.x, tileMapDispl.y + posDoor.y, 2);
 		else if (sprite->animFinished()){
 			sprite->changeAnimation(DOWN);

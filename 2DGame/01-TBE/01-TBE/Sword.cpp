@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #include "Sword.h"
 #include "Game.h"
+#include "windows.h"
+#include "mmsystem.h"
 
 enum SwordAnims
 {
@@ -43,6 +45,7 @@ void Sword::update(int deltaTime)
 	{
 		sprite->changeAnimation(TAKEN);
 		player->getSword();
+		PlaySound(TEXT("music/sword.wav"), NULL, SND_ASYNC);
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSword.x), float(tileMapDispl.y + posSword.y)));

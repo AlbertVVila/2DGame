@@ -675,7 +675,7 @@ void Player::update(int deltaTime)
 			if (map->JumpableLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_LEFT_CATCH);
 			else sprite->changeAnimation(JUMP_LEFT_FAIL);
 		}
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+		if (frame <= 5 && !map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 			sprite->changeAnimation(FALL_LEFT);
 			falldist = posPlayer.y;
 		}
@@ -688,7 +688,7 @@ void Player::update(int deltaTime)
 			if (map->JumpableRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_RIGHT_CATCH);
 			else sprite->changeAnimation(JUMP_RIGHT_FAIL);
 		}
-		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+		if (frame <= 5 && !map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 			sprite->changeAnimation(FALL_RIGHT);
 			falldist = posPlayer.y;
 		}

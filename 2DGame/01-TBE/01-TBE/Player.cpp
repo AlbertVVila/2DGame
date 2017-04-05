@@ -610,7 +610,7 @@ void Player::update(int deltaTime)
 			falldist = posPlayer.y;
 		}
 		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_LEFT);
-
+		//if (frame != frameant && (frame == 2 || frame == 6)) PlaySound(TEXT("music/step.wav"), NULL, SND_ASYNC);
 		break;
 
 	case MOVE_RIGHT:
@@ -623,6 +623,7 @@ void Player::update(int deltaTime)
 			falldist = posPlayer.y;
 		}
 		if (bCombat && hasSword) sprite->changeAnimation(DESENFUNDA_RIGHT);
+		//if (frame != frameant && (frame == 2 || frame == 6)) PlaySound(TEXT("music/step.wav"), NULL, SND_ASYNC);
 		break;
 
 	case STOP_LEFT:
@@ -974,6 +975,7 @@ void Player::update(int deltaTime)
 	if (star->animation() == ON) cd_star += deltaTime;
 	if (star->animation() == ON && cd_star >= CD_STAR) star->changeAnimation(OFF);
 
+	frameant = frame;
 	//faltarien uns bools o funcions per saber estats del attack del player
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	star->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));

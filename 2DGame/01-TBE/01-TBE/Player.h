@@ -50,7 +50,7 @@ private:
 	TileMap *map;
 	bool teEspasa;
 	float cd_star;
-
+	int frameant;
 };
 
 

@@ -27,6 +27,7 @@ public:
 	bool isBlocking();
 	bool isSlow();
 	bool isJumping();
+	void setAlive();
 	void damage(int amount, string type);
 	void heal(int amount);
 	void setTileMap(TileMap *tileMap);

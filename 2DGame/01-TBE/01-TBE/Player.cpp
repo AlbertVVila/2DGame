@@ -675,6 +675,10 @@ void Player::update(int deltaTime)
 			if (map->JumpableLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_LEFT_CATCH);
 			else sprite->changeAnimation(JUMP_LEFT_FAIL);
 		}
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_LEFT);
+			falldist = posPlayer.y;
+		}
 		break;
 
 	case JUMP_RIGHT:
@@ -683,6 +687,10 @@ void Player::update(int deltaTime)
 		if (sprite->animFinished()){
 			if (map->JumpableRight(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(JUMP_RIGHT_CATCH);
 			else sprite->changeAnimation(JUMP_RIGHT_FAIL);
+		}
+		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
+			sprite->changeAnimation(FALL_RIGHT);
+			falldist = posPlayer.y;
 		}
 		break;
 
@@ -1065,6 +1073,12 @@ void Player::getSword()
 void Player::setPotionInRange(bool inRange, string dir){
 	bPotionInRange = inRange;
 	potionDir = dir;
+}
+
+void Player::setAlive(){
+	this->hp = MAX_LIFE;
+	this->dead = false;
+	sprite->changeAnimation(STAND_RIGHT);
 }
 
 

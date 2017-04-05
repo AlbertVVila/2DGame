@@ -9,8 +9,8 @@
 #define SCREEN_X 0
 #define SCREEN_Y 0
 
-#define INIT_PLAYER_X_TILES 53
-#define INIT_PLAYER_Y_TILES 9
+#define INIT_PLAYER_X_TILES 34
+#define INIT_PLAYER_Y_TILES -1
 
 #define INIT_PLAYER_X_TILES2 2
 #define INIT_PLAYER_Y_TILES2 9.9
@@ -94,8 +94,8 @@ void Scene::init()
 {
 	initShaders();
 	changelevel(currentlvl);
-	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
-	//projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f + 14, 0.f);
+	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
+	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f + 14, 0.f);
 	currentTime = 0.0f;
 }
 void Scene::initlevel1(){
@@ -277,10 +277,11 @@ void Scene::initlevel2(){
 	torchs[22].setPosition(glm::vec2(45 * 32 + 10, 7 * 64 - 43));
 	torchs[23].setPosition(glm::vec2(17 * 32 + 10, 10 * 64 - 43));
 	torchs[24].setPosition(glm::vec2(14 * 32 + 10, 7 * 64 - 43));
-	if (player == NULL){
+	//if (player == NULL){
 		player = new Player();
 		player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	}
+	//}
+	player->setAlive();
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES2 * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES2 * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 	fallings = new Falling[NUM_FALLINGS2];
@@ -473,7 +474,7 @@ void Scene::update(int deltaTime)
 	int panelY = int((player->getPosition().y+64) / 192.f);
 	life->setPosition(glm::vec2(panelX * 32.f * 10, panelY * 64.f * 3 + 135));
 	life->update(deltaTime);
-	//projection = glm::ortho(panelX * 32.f * 10, (panelX + 1) * 32.f * 10, (panelY + 1) * 64.f * 3 + 7, panelY * 64.f * 3);
+	projection = glm::ortho(panelX * 32.f * 10, (panelX + 1) * 32.f * 10, (panelY + 1) * 64.f * 3 + 7, panelY * 64.f * 3);
 }
 
 void Scene::render()

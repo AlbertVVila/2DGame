@@ -763,7 +763,8 @@ void Player::update(int deltaTime)
 
 	case STAND_UP_LEFT:
 		dist = (posPlayer.y - falldist) / 64;
-		if (dist > 2) this->damage(dist, "FALL");
+		if (dist == 2 && frame != frameant && frame == 1) this->damage(1, "FALL");
+		else if (dist > 2) this->damage(dist, "FALL");
 		else if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 			sprite->changeAnimation(FALL_LEFT);
@@ -773,7 +774,8 @@ void Player::update(int deltaTime)
 
 	case STAND_UP_RIGHT:
 		dist = (posPlayer.y - falldist) / 64;
-		if (dist > 2) this->damage(dist, "FALL");
+		if (dist == 2 && frame != frameant && frame == 1) this->damage(1, "FALL");
+		else if (dist > 2) this->damage(dist, "FALL");
 		else if(sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 		if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 			sprite->changeAnimation(FALL_RIGHT);

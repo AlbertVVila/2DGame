@@ -27,6 +27,7 @@ public:
 	bool isBlocking();
 	bool isSlow();
 	bool isJumping();
+	bool isStand();
 	void setAlive();
 	void damage(int amount, string type);
 	void heal(int amount);

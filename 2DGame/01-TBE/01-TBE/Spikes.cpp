@@ -55,7 +55,7 @@ void Spikes::update(int deltaTime)
 	int sy = posSpikes.y;
 	int anim = sprite->animation();
 
-	if (anim == DOWN && (py == sy - 8) && (px - sx) >= -16 && (px - sx) < 15 && !player->isJumping() && !player->isSlow())
+	if (anim == DOWN && (py == sy - 8) && (px - sx) >= -16 && (px - sx) < 15 && !player->isJumping() && !player->isSlow() && !player->isStand())
 	{
 		sprite->changeAnimation(GOUP);
 		player->damage(3,"PINXO");

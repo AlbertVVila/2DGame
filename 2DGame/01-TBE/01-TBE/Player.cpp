@@ -1099,6 +1099,11 @@ bool Player::isJumping()
 		|| sprite->animation() == RJUMP_LEFT_START || sprite->animation() == RJUMP_RIGHT_START;
 }
 
+bool Player::isStand()
+{
+	return sprite->animation() == STAND_LEFT || sprite->animation() == STAND_RIGHT;
+}
+
 void Player::setTileMap(TileMap *tileMap)
 {
 	map = tileMap;

@@ -23,7 +23,7 @@ enum PlayerAnims
 	FALL_LEFT, FALL_RIGHT, FALLING_LEFT, FALLING_RIGHT, STAND_UP_LEFT, STAND_UP_RIGHT,
 	DESENFUNDA_LEFT, DESENFUNDA_RIGHT, ENFUNDA_LEFT, ENFUNDA_RIGHT, ATTACK_LEFT, ATTACK_RIGHT, BLOCK_LEFT, BLOCK_RIGHT, ENGARDE_LEFT, ENGARDE_RIGHT,
 	AMOVE_LEFT_FORWARD, AMOVE_LEFT_BACK, AMOVE_RIGHT_FORWARD, AMOVE_RIGHT_BACK, DEATHPINX_LEFT, DEATHPINX_RIGHT, DEATHENEMY_LEFT, DEATHENEMY_RIGHT,
-	DEATHFALL_LEFT, DEATHFALL_RIGHT, DRINK_LEFT, DRINK_RIGHT, GOD
+	DEATHFALL_LEFT, DEATHFALL_RIGHT, DRINK_LEFT, DRINK_RIGHT, DOWN_LEFT, DOWN_RIGHT, GOD
 };
 
 enum StarAnims
@@ -512,6 +512,26 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.8f, 0.8f));
 	sprite->addKeyframe(DRINK_RIGHT, glm::vec2(-0.9f, 0.8f));
 
+	sprite->setAnimationSpeed(DOWN_LEFT,8);
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.2f, 0.35f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.1f, 0.35f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.f, 0.35f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.9f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.8f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.7f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.6F, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.5f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.4f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.3f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.2f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.1f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.f, 0.3f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.9f, 0.25f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.8f, 0.25f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.3f, 0.25f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.4f, 0.25f));
+	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.5f, 0.25f));
+
 	sprite->setAnimationSpeed(GOD, 8);
 	sprite->addKeyframe(GOD, glm::vec2(0.0f, 0.85f));
 
@@ -572,6 +592,7 @@ void Player::update(int deltaTime)
 				sprite->changeAnimation(DRINK_LEFT);
 				this->heal(1);
 			}
+			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && map->DownableLeft(posPlayer, glm::ivec2(64, 64))) sprite->changeAnimation(DOWN_LEFT);
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 				sprite->changeAnimation(FALL_LEFT);
 				falldist = posPlayer.y;
@@ -1001,6 +1022,11 @@ void Player::update(int deltaTime)
 			break;
 		case DRINK_RIGHT:
 			if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
+			break;
+		case DOWN_LEFT:
+		case DOWN_RIGHT:
+			if (frame == 5 || (frame>7 && frame<15)) posPlayer.y++;
+			if(sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
 			break;
 		}
 

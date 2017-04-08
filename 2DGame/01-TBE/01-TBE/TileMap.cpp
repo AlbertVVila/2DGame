@@ -203,6 +203,18 @@ bool TileMap::JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
 	return false;
 }
 
+bool TileMap::DownableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
+	int x, y;
+	x = pos.x / tileSizeWidth;
+	y = round((double)pos.y / (double)tileSizeHeight);
+	if ((map[(y + 1)*mapSize.x + x] < 40 && map[(y + 1)*mapSize.x + x] >= 20) || map[(y + 1)*mapSize.x + x] == -1
+		&& map[(y + 1)*mapSize.x + (x + 1)] == -1){ // mira que la pared anterior sigui buida
+		if (tileSizeWidth * x + 20 > pos.x)
+			return true;
+	}
+	return false;
+}
+
 bool TileMap::JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const{
 	int x, y;
 	x = (pos.x + size.x/2 - 1) / tileSizeWidth;
@@ -224,6 +236,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSizeHeight;
 	for (int x = x0; x <= x1; x++)
 	{
+		//CAS x0 canviar opció per ajustar colider
 		if (map[y*mapSize.x + x] < 40 && map[y*mapSize.x + x] >= 20 && map[y*mapSize.x + x] != -1
 			|| (maptrap[y*mapSize.x + x] == 1 && round((double)((pos.x + size.x / 2 - 1) / tileSizeWidth)) == x))
 		{

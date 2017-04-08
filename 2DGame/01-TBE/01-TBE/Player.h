@@ -51,6 +51,8 @@ private:
 	bool teEspasa;
 	float cd_star;
 	int frameant;
+	bool godMode;
+	float cd_god;
 };
 
 

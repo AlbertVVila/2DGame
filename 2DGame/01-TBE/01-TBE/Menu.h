@@ -23,6 +23,7 @@ public:
 	void render();
 	bool getBmenu();
 	bool getBplay();
+	void setEnd();
 
 private:
 	void initShaders();

@@ -36,6 +36,7 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render();
+	int getCurrentLvl();
 
 private:
 	void initShaders();
@@ -62,7 +63,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-
+	glm::vec2 nextLevelPos;
 };
 
 

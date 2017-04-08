@@ -238,6 +238,8 @@ void Scene::initlevel1(){
 	viziers[0].setPosition(glm::vec2(320, 312));
 	viziers[1].setPosition(glm::vec2(320, 504));
 
+	nextLevelPos = glm::vec2(96,512);
+
 	life = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	life->setPlayer(player);
@@ -277,13 +279,11 @@ void Scene::initlevel2(){
 	torchs[22].setPosition(glm::vec2(45 * 32 + 10, 7 * 64 - 43));
 	torchs[23].setPosition(glm::vec2(17 * 32 + 10, 10 * 64 - 43));
 	torchs[24].setPosition(glm::vec2(14 * 32 + 10, 7 * 64 - 43));
-	//if (player == NULL){
-		player = new Player();
-		player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	//}
+
 	player->setAlive();
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES2 * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES2 * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
+
 	fallings = new Falling[NUM_FALLINGS2];
 	for (int i = 0; i < NUM_FALLINGS2; i++)
 	{
@@ -433,6 +433,8 @@ void Scene::initlevel2(){
 	fats[2].setPosition(glm::vec2(26 * 32, 4 * 64 - 8));
 	fats[3].setPosition(glm::vec2(1 * 32, 3 * 64 - 8));
 
+	nextLevelPos = glm::vec2(192, 128);
+
 	life = new Life();
 	life->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	life->setPlayer(player);
@@ -444,8 +446,16 @@ void Scene::update(int deltaTime)
 	if (Game::instance().getKey(13)){ //enter key
 		this->init();
 	}
-	if (Game::instance().getSpecialKey(GLUT_KEY_INSERT)) {
+	if (Game::instance().getKey(108)) {
 		currentlvl == 1 ? currentlvl = 2 : currentlvl = 1;
+		changelevel(currentlvl);
+	}
+	if ((player->getPosition().y == nextLevelPos.y - 8) &&
+		(player->getPosition().x - nextLevelPos.x) >= -27 &&
+		(player->getPosition().x - nextLevelPos.x) < 25)
+	{
+		if (currentlvl == 1) currentlvl = 2;
+		else if (currentlvl == 2) currentlvl = 3;
 		changelevel(currentlvl);
 	}
 	currentTime += deltaTime;
@@ -540,6 +550,11 @@ void Scene::changelevel(int level){
 		nspikes = NUM_SPIKES2;
 		break;
 	}
+}
+
+int Scene::getCurrentLvl()
+{
+	return currentlvl;
 }
 
 void Scene::initShaders()

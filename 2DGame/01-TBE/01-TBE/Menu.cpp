@@ -73,7 +73,7 @@ void Menu::update(int deltaTime)
 {
 	int anim = sprite->animation();
 	if (anim != END && song_cd >= 25000) { song_cd = 0; PlaySound(TEXT("music/intro_theme.wav"), NULL, SND_ASYNC); }
-	if (anim == END && song_cd >= 115000) { song_cd = 0; PlaySound(TEXT("music/won.wav"), NULL, SND_ASYNC); }
+	else if (anim == END && song_cd >= 115000) { song_cd = 0; PlaySound(TEXT("music/won.wav"), NULL, SND_ASYNC); }
 	else song_cd += deltaTime;
 	cd += deltaTime;
 	if (cd >= CD)
@@ -106,7 +106,7 @@ void Menu::update(int deltaTime)
 			if (Game::instance().getKey(13)) { cd = 0; menuON = false; PlaySound(NULL, NULL, SND_ASYNC); }
 			break;
 		case END:
-			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); }
+			if (Game::instance().getKey(13)) { cd = 0; sprite->changeAnimation(OPT1); PlaySound(TEXT("music/intro_theme.wav"), NULL, SND_ASYNC); }
 			break;
 		}
 }
@@ -163,4 +163,11 @@ bool Menu::getBmenu()
 bool Menu::getBplay()
 {
 	return bplay;
+}
+
+void Menu::setEnd()
+{
+	sprite->changeAnimation(END);
+	song_cd = 115000;
+	menuON = true;
 }

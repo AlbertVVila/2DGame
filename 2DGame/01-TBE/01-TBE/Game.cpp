@@ -21,6 +21,13 @@ bool Game::update(int deltaTime)
 		}
 		bPlay = menu.getBplay();
 	}
+	if (!bmenu){
+		if (scene.getCurrentLvl() == 3)
+		{
+			bmenu = true;
+			menu.setEnd();
+		}
+	}
 
 	if (bmenu) menu.update(deltaTime);
 	else scene.update(deltaTime);

@@ -56,7 +56,7 @@ Funcionalitats
 	Com a funcionalitat extra em afegit uns rellotges distribuits pels dos nivells que, si el player els toca, et teletransporten a un altre punt del mapa.
 	A més, com a funcionalitats per poder probar el joc, em afegit un god mode (tecla g) i la posibilitat de poder cambiar de nivell (tecla l).
 	Al activar el god mode, s'et canvia el sprite del príncep per un sprite del personatje Saitama, que es immortal, no li afecta la gravetat ni les colisions.
-	També sona una música de fons més adient al moment. Recorda que al canviar de nivell, si no has agafat l'espasa en el nivell 1, tampoc la tindràs en el nivell 2.
+	També sona una música de fons més adient al moment. Si estaves mort i actives el god mode, revius.
 
 
 

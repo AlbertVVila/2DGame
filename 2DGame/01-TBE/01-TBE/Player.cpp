@@ -1186,12 +1186,20 @@ void Player::setPotionInRange(bool inRange, string dir){
 	potionDir = dir;
 }
 
+void Player::setSword(bool state){
+	hasSword = state;
+}
+
 void Player::setAlive(){
 	this->hp = MAX_LIFE;
 	this->dead = false;
 	sprite->changeAnimation(STAND_RIGHT);
 }
 
+void Player::look(string dir){
+	if (dir == "right") sprite->changeAnimation(STAND_RIGHT);
+	else sprite->changeAnimation(STAND_LEFT);
+}
 
 void Player::changeDirection()
 {

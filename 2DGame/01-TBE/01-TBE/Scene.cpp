@@ -283,7 +283,8 @@ void Scene::initlevel2(){
 
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->getSword();
+	player->setSword(true);
+	player->look("right");
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES2 * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES2 * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 

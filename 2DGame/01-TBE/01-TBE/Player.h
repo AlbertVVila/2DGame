@@ -29,6 +29,8 @@ public:
 	bool isJumping();
 	bool isStand();
 	void setAlive();
+	void look(string dir);
+	void setSword(bool state);
 	void damage(int amount, string type);
 	void heal(int amount);
 	void setTileMap(TileMap *tileMap);

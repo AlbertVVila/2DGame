@@ -1,0 +1,85 @@
+Integrants del grup
+
+	David González Martos
+	Albert Val Vila
+
+
+
+Funcionalitats
+
+	Totes les funcionalitats bàsiques. L'objectiu del joc és aconseguir escapar, superant els dos nivells.
+	Necessites explorar per trobar la sortida, pocions per recuperar vida, o per conseguir l'espasa.
+	Guanyes quan superes el segon nivell. Si mors, pots tornar a reintentar el nivell actual.
+
+
+	Totes les funcionalitats de la part comuna:
+
+	Interfície gràfica que mostra la vida del jugador. Dos nivells d'aspecte i distribució diferent.
+	En el primer nivell pots aconseguir l'espasa. El segon nivels és una mica més difícil que el primer.
+	Dues trampes que existeixen en el joc original, presents en els dos nivells:
+	Pinxos: Quan el jugador passa corrents pels pinxos, o cau a sobre, s'activen provocant mort instantània.
+		Si pasa per sobre però caminant lent, no li afecten.
+	Terra fals: Quan el jugador passa per sobre d'aquesta rajola falsa, s'activa i al cap d'un segon cau.
+	Dos enemics que existeixen en el joc original, amb representacions diferents. Les seves vides apareixen en el seu cap.
+	Vizier: Enemic simple, que pot atacar, bloquejar i morir si la seva vida arriba a 0.
+		Comença amb 3 de vida, cada cop que rep li resta 1. El seu patró és senzill, cada mig segon realitza una habilitat.
+		Aquesta habilitat pot ser un atac en direcció al jugador, o bloqueig si el jugador està atacant.
+		No pot bloquejar dos cops seguits. Cada atac resta una vida al jugador, si aquest no està bloquejant.
+	Fat: 	Enemic fort, similar al Vizier, però amb diferent patró d'atacs.
+		Inicialment fa 3 atacs seguits, llavors espera 1 segon, i després decideix si bloquejar o fer un altre cop 3 atacs seguits.
+	El player pot lluitar amb l'espasa (si la ha conseguit). Quan es troba amb un enemic entra automaticament en mode combat, en el que pot
+	atacar o bloquejar. Cada atac fa un punt de mal (si l'enemic no bloqueja) i mentre estàs bloquejant, no pots rebre mal.
+	Al sortir del rang de visió d'un enemic, surts del mode combat.
+	Quan el player arriba a 0 de vida, mor i ja no es pot moure ni interactuar, l'únic que pots fer es tornar a començar el nivell (apretant ENTER).
+
+
+	Funcionalitats extres:
+
+	Pocions. El player pot agafar una poció si està lo suficientment aprop. La poció desapareix i el player es cura 1 vida. No pot superar la vida màxima (3).
+	Botons i Portes. Quan una porta està tancada, el player no la pot passar. Al caminar per sobre d'un botó, aquest s'activa i la porta es puja.
+			Cada botó té una porta associada. Les portes tenen un temps abans de que es tornin a tancar automaticament.
+	Espasa. En el primer nivell hi ha una espasa amagada que el player ha de trobar per poder accedir al mode combat. Quan l'agafa desapareix.
+	Torxes. En les parets hi ha torxes animades.
+	Estructura bàsica de 4 pantalles. Tenim un menú en el que pots seleccionar 4 opcions:
+		Nova Partida, que et mostra el text amb l'obectiu del joc i seguidament comences a jugar.
+		Instruccions, per veure els controls del player.
+		Crèdits, per veure els crèdits.
+		Sortir, que tanca el joc.
+	A més, en acabar el joc, et surt el text de felicitacions i pots tornar al menú, pero poder començar una nova partida si vols, o sortir.
+	So.	Tenim música de fons pel menú, pantalla de felicitació, recollir espasa, i god mode.
+		Em afegit sons per a les següens accions: bloquejar, apretar botó, rebre mal, caiguda del player, porta pujant/baixant, rajola falsa, fatality (quan mor el player),
+		poció, pinxos i moure l'espasa.
+
+
+	Part Creativa:
+	
+	Com a funcionalitat extra em afegit uns rellotges distribuits pels dos nivells que, si el player els toca, et teletransporten a un altre punt del mapa.
+	A més, com a funcionalitats per poder probar el joc, em afegit un god mode (tecla g) i la posibilitat de poder cambiar de nivell (tecla l).
+	Al activar el god mode, s'et canvia el sprite del príncep per un sprite del personatje Saitama, que es immortal, no li afecta la gravetat ni les colisions.
+	També sona una música de fons més adient al moment. Recorda que al canviar de nivell, si no has agafat l'espasa en el nivell 1, tampoc la tindràs en el nivell 2.
+
+
+
+
+Instruccions
+
+	moviment:	fletxa esquerra || fletxa dreta
+	correr: 	mantenir (fletxa esquerra || fletxa dreta)
+	caminar lent: 	shift + (fletxa esquerra || fletxa dreta)
+	saltar: 	fletxa adalt
+	salt lateral: 	fletxa adalt + (fletxa esquerra || fletxa dreta)
+	saltar corrent:	correr + fletxa adalt
+	pujar terra:	mantenir fletxa adalt
+	baixar terra:	mantenir fletxa abaix
+	agafar objecte:	fletxa abaix
+	repetir nivell:	enter (tant si estas viu com mort)
+	
+	mode combat
+	atac: 		shift
+	bloquejar: 	fletxa adalt
+
+	activar/desactivar god mode: g
+	cambiar nivell:	l
+	seleccionar opció en el menú: enter
+	
+	

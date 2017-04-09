@@ -207,8 +207,8 @@ bool TileMap::DownableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
 	int x, y;
 	x = pos.x / tileSizeWidth;
 	y = round((double)pos.y / (double)tileSizeHeight);
-	if ((map[(y + 1)*mapSize.x + (x+1)] < 40 && map[(y + 1)*mapSize.x + (x+1)] >= 20) || map[(y + 1)*mapSize.x + (x+1)] == -1
-		/**&&map[(y + 1)*mapSize.x + (x + 1)] == -1 **/){ // mira que la pared anterior sigui buida
+	if (((map[(y + 1)*mapSize.x + (x+1)] < 40 && map[(y + 1)*mapSize.x + (x+1)] >= 20) || map[(y + 1)*mapSize.x + (x+1)] == -1)
+		&& map[y*mapSize.x+(x+1)]==-1){
 		if (tileSizeWidth * x + 20 > pos.x)
 			return true;
 	}
@@ -231,8 +231,8 @@ bool TileMap::DownableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 	int x, y;
 	x = (pos.x + size.x / 2 - 1) / tileSizeWidth;
 	y = round((double)pos.y / (double)tileSizeHeight);
-	if (map[(y + 1)*mapSize.x + (x-1)] < 40 && map[(y + 1)*mapSize.x + (x-1)] >= 20
-		|| map[(y + 1)*mapSize.x + (x-1)] == -1/** && map[(y + 1)*mapSize.x + (x - 1)] == -1**/){
+	if ((map[(y + 1)*mapSize.x + (x-1)] < 40 && map[(y + 1)*mapSize.x + (x-1)] >= 20
+		|| map[(y + 1)*mapSize.x + (x-1)] == -1) && map[y*mapSize.x + (x - 1)] == -1){
 		if (tileSizeWidth*x - 40 < pos.x)
 			return true;
 	}

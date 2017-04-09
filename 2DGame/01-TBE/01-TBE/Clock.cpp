@@ -36,7 +36,7 @@ void Clock::update(int deltaTime)
 	int sy = posClock.y;
 	int anim = sprite->animation();
 
-	if ((py == sy - 8) && (px - sx) >= -16 && (px - sx) < 15)
+	if (abs(py-sy)<=20 && (px - sx) >= -16 && (px - sx) < 15)
 	{
 		player->setPosition(target);
 	}

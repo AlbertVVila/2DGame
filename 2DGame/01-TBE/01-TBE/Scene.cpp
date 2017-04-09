@@ -406,7 +406,7 @@ void Scene::initlevel2(){
 		clocks[i].setPlayer(player);
 	}
 	clocks[0].setPosition(glm::vec2(2 * 32, 13 * 64 + 10));
-	clocks[0].setTarget(glm::vec2(43 * 32, 7 * 64));
+	clocks[0].setTarget(glm::vec2(34 * 32, 6 * 64));
 	clocks[1].setPosition(glm::vec2(25 * 32 - 10, 12 * 64));
 	clocks[1].setTarget(glm::vec2(58 * 32, 4 * 64));
 

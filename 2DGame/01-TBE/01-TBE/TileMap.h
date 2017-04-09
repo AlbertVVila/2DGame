@@ -28,9 +28,9 @@ public:
 	int getTileSizeW() const { return tileSizeWidth; }
 	int getTileSizeH() const { return tileSizeHeight; }
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool JumpableLeft(glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool DownableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool JumpableRight(glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool DownableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;

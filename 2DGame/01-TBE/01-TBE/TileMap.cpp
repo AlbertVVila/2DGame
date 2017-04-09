@@ -191,14 +191,23 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	return false;
 }
 
-bool TileMap::JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
+bool TileMap::JumpableLeft(glm::ivec2 &pos, const glm::ivec2 &size) const{
 	int x, y;
 	x = pos.x / tileSizeWidth;
 	y = round((double)pos.y / (double)tileSizeHeight);
-	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 && map[(y - 1)*mapSize.x + x] != -1
-		&& map[(y - 1)*mapSize.x + (x+1)] == -1){ // mira que la pared anterior sigui buida
-		if (tileSizeWidth * x + 20 > pos.x)
+	if ((map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20) 
+		|| (map[(y - 1)*mapSize.x + x] == -1 && map[(y - 1)*mapSize.x + x - 1] < 40 && map[(y - 1)*mapSize.x + x - 1] >= 20)
+		&& (map[(y - 1)*mapSize.x + (x + 1)] == -1 || map[(y - 1)*mapSize.x + x] == -1)){ // mira que la pared anterior sigui buida
+		if (map[(y - 1)*mapSize.x + x] == -1){
+			if (tileSizeWidth*x + 10 >= pos.x){
+				pos.x -= 20;
+				return true;
+			}
+		}
+		else if (tileSizeWidth * x + 30 > pos.x){
+			if (tileSizeWidth*x + 20 <= pos.x) pos.x -= 15;
 			return true;
+		}
 	}
 	return false;
 }
@@ -215,13 +224,20 @@ bool TileMap::DownableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const{
 	return false;
 }
 
-bool TileMap::JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const{
+bool TileMap::JumpableRight(glm::ivec2 &pos, const glm::ivec2 &size) const{
 	int x, y;
 	x = (pos.x + size.x/2 - 1) / tileSizeWidth;
 	y = round((double)pos.y / (double)tileSizeHeight);
-	if (map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 
-		&& map[(y - 1)*mapSize.x + x] != -1 && map[(y - 1)*mapSize.x + (x - 1)] == -1){
-		if (tileSizeWidth*x - 40 < pos.x)
+	if ((map[(y - 1)*mapSize.x + x] < 40 && map[(y - 1)*mapSize.x + x] >= 20 )
+		|| (map[(y - 1)*mapSize.x + x] == -1 && map[(y - 1)*mapSize.x + x+1] < 40 && map[(y - 1)*mapSize.x + x+1] >= 20)
+		&& (map[(y - 1)*mapSize.x + (x - 1)] == -1 || map[(y - 1)*mapSize.x + x] == -1)){
+		if (map[(y - 1)*mapSize.x + x] == -1){
+			if (tileSizeWidth*x-20 <= pos.x){
+				pos.x += 20;
+				return true;
+			}
+		}
+		else if (tileSizeWidth*x - 40 < pos.x)
 			return true;
 	}
 	return false;

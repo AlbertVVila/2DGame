@@ -291,7 +291,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(STAND_UP_RIGHT, glm::vec2(-1.f, 0.4f));
 	sprite->addKeyframe(STAND_UP_RIGHT, glm::vec2(-0.1f, 0.45f));
 
-	sprite->setAnimationSpeed(SJUMP_LEFT_START, 8);
+	sprite->setAnimationSpeed(SJUMP_LEFT_START, 7);
 	sprite->addKeyframe(SJUMP_LEFT_START, glm::vec2(0.1f, 0.45f));
 	sprite->addKeyframe(SJUMP_LEFT_START, glm::vec2(0.2f, 0.45f));
 	sprite->addKeyframe(SJUMP_LEFT_START, glm::vec2(0.3f, 0.45f));
@@ -304,7 +304,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(SJUMP_LEFT_START, glm::vec2(0.f, 0.5f));
 	sprite->addKeyframe(SJUMP_LEFT_START, glm::vec2(0.1f, 0.5f));
 
-	sprite->setAnimationSpeed(SJUMP_RIGHT_START, 8);
+	sprite->setAnimationSpeed(SJUMP_RIGHT_START, 7);
 	sprite->addKeyframe(SJUMP_RIGHT_START, glm::vec2(-0.2f, 0.45f));
 	sprite->addKeyframe(SJUMP_RIGHT_START, glm::vec2(-0.3f, 0.45f));
 	sprite->addKeyframe(SJUMP_RIGHT_START, glm::vec2(-0.4f, 0.45f));

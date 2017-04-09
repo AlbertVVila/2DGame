@@ -31,6 +31,7 @@ public:
 	bool JumpableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool DownableLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool JumpableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool DownableRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 	void newTrapCollider(int x, int y, int type);

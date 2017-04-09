@@ -44,7 +44,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	spritesheet.loadFromFile("images/kidrun.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
 	star = Sprite::createSprite(glm::ivec2(64, 64), glm::vec2(0.1, 0.05), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(57);
+	sprite->setNumberAnimations(59);
 	star->setNumberAnimations(2);
 
 	star->setAnimationSpeed(ON, 8);
@@ -532,6 +532,26 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.4f, 0.25f));
 	sprite->addKeyframe(DOWN_LEFT, glm::vec2(0.5f, 0.25f));
 
+	sprite->setAnimationSpeed(DOWN_RIGHT, 8);
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.3f, 0.35f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.2f, 0.35f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.1f, 0.35f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-1.f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.9f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.8f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.7F, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.6f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.5f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.4f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.3f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.2f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.1f, 0.3f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-1.f, 0.25f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.9f, 0.25f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.4f, 0.25f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.5f, 0.25f));
+	sprite->addKeyframe(DOWN_RIGHT, glm::vec2(-0.6f, 0.25f));
+
 	sprite->setAnimationSpeed(GOD, 8);
 	sprite->addKeyframe(GOD, glm::vec2(0.0f, 0.85f));
 
@@ -609,6 +629,9 @@ void Player::update(int deltaTime)
 			if (bPotionInRange && direction == potionDir && Game::instance().getSpecialKey(GLUT_KEY_DOWN)){
 				sprite->changeAnimation(DRINK_RIGHT);
 				this->heal(1);
+			}
+			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && map->DownableRight(posPlayer, glm::ivec2(64, 64))){
+				sprite->changeAnimation(DOWN_RIGHT);
 			}
 			if (!map->collisionMoveDown(posPlayer, glm::ivec2(64, 64), &posPlayer.y)){
 				sprite->changeAnimation(FALL_RIGHT);
@@ -1024,9 +1047,12 @@ void Player::update(int deltaTime)
 			if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 			break;
 		case DOWN_LEFT:
-		case DOWN_RIGHT:
 			if (frame == 5 || (frame>7 && frame<15)) posPlayer.y++;
 			if(sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
+			break;
+		case DOWN_RIGHT:
+			if (frame == 5 || (frame>7 && frame<15)) posPlayer.y++;
+			if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
 			break;
 		}
 

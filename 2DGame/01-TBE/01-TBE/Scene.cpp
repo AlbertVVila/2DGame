@@ -94,7 +94,8 @@ void Scene::init()
 {
 	initShaders();
 	changelevel(currentlvl);
-	//projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
+	//
+	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 	projection = glm::ortho(0.f, 32 * 10.f, 64 * 3.f + 14, 0.f);
 	currentTime = 0.0f;
 }
@@ -171,7 +172,7 @@ void Scene::initlevel1(){
 
 	doors = new Door[NUM_DOORS];
 	for (int i = 0; i < NUM_DOORS; i++){
-		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/door_sprite.png");
 		doors[i].setTileMap(ground_wall);
 	}
 	doors[0].setPosition(glm::vec2(448, 64));
@@ -280,7 +281,9 @@ void Scene::initlevel2(){
 	torchs[23].setPosition(glm::vec2(17 * 32 + 10, 10 * 64 - 43));
 	torchs[24].setPosition(glm::vec2(14 * 32 + 10, 7 * 64 - 43));
 
-	player->setAlive();
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->getSword();
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES2 * ground_wall->getTileSizeW(), INIT_PLAYER_Y_TILES2 * ground_wall->getTileSizeH()));
 	player->setTileMap(ground_wall);
 
@@ -334,17 +337,17 @@ void Scene::initlevel2(){
 
 	doors = new Door[NUM_DOORS2];
 	for (int i = 0; i < NUM_DOORS2; i++){
-		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		doors[i].init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram, "images/door2.png");
 		doors[i].setTileMap(ground_wall);
 	}
-	doors[0].setPosition(glm::vec2(9 * 32, 4 * 64));
-	doors[1].setPosition(glm::vec2(9 * 32, 10 * 64));
-	doors[2].setPosition(glm::vec2(19 * 32, 10 * 64));
-	doors[3].setPosition(glm::vec2(19 * 32, 7 * 64));
-	doors[4].setPosition(glm::vec2(29 * 32, 4 * 64));
-	doors[5].setPosition(glm::vec2(29 * 32, 7 * 64));
-	doors[6].setPosition(glm::vec2(39 * 32, 10 * 64));
-	doors[7].setPosition(glm::vec2(49 * 32, 11 * 64));
+	doors[0].setPosition(glm::vec2(9 * 32, 4 * 64-10));
+	doors[1].setPosition(glm::vec2(9 * 32, 10 * 64-10));
+	doors[2].setPosition(glm::vec2(19 * 32, 10 * 64-10));
+	doors[3].setPosition(glm::vec2(19 * 32, 7 * 64-10));
+	doors[4].setPosition(glm::vec2(29 * 32, 4 * 64-10));
+	doors[5].setPosition(glm::vec2(29 * 32, 7 * 64-10));
+	doors[6].setPosition(glm::vec2(39 * 32, 10 * 64-10));
+	doors[7].setPosition(glm::vec2(49 * 32, 11 * 64-10));
 
 	doors[0].setTimeOpened(12000);
 	doors[1].setTimeOpened(5000);

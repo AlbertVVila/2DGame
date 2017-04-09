@@ -46,7 +46,6 @@ void Potion::update(int deltaTime)
 		if (player->isDrinking()){
 			player->setPotionInRange(false, px < sx + 5 ? "right" : "left");
 			sprite->changeAnimation(TAKEN);
-			PlaySound(TEXT("music/potion.wav"), NULL, SND_ASYNC);
 		}
 		else{
 			player->setPotionInRange(true, px < sx + 5 ? "right" : "left");

@@ -37,6 +37,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	int getCurrentLvl();
+	void setCurrentLvl(int l);
 
 private:
 	void initShaders();

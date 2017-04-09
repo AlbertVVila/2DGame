@@ -1042,9 +1042,11 @@ void Player::update(int deltaTime)
 			break;
 		case DRINK_LEFT:
 			if (sprite->animFinished()) sprite->changeAnimation(STAND_LEFT);
+			if (frame == 6 && frame != frameant) PlaySound(TEXT("music/potion.wav"), NULL, SND_ASYNC);
 			break;
 		case DRINK_RIGHT:
 			if (sprite->animFinished()) sprite->changeAnimation(STAND_RIGHT);
+			if (frame == 6 && frame != frameant) PlaySound(TEXT("music/potion.wav"), NULL, SND_ASYNC);
 			break;
 		case DOWN_LEFT:
 			if (frame == 5 || (frame>7 && frame<15)) posPlayer.y++;

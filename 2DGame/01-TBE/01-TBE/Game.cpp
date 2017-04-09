@@ -26,6 +26,7 @@ bool Game::update(int deltaTime)
 		{
 			bmenu = true;
 			menu.setEnd();
+			scene.setCurrentLvl(1);
 		}
 	}
 

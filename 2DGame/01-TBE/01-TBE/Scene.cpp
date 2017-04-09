@@ -560,6 +560,11 @@ int Scene::getCurrentLvl()
 	return currentlvl;
 }
 
+void Scene::setCurrentLvl(int l)
+{
+	currentlvl = l;
+}
+
 void Scene::initShaders()
 {
 	Shader vShader, fShader;

@@ -1149,8 +1149,8 @@ bool Player::isSlow()
 
 bool Player::isJumping()
 {
-	return sprite->animation() == SJUMP_LEFT_START || sprite->animation() == SJUMP_RIGHT_START
-		|| sprite->animation() == RJUMP_LEFT_START || sprite->animation() == RJUMP_RIGHT_START;
+	return (sprite->animation() == SJUMP_LEFT_START || sprite->animation() == SJUMP_RIGHT_START
+		|| sprite->animation() == RJUMP_LEFT_START || sprite->animation() == RJUMP_RIGHT_START) && sprite->getFrame()>4;
 }
 
 bool Player::isStand()

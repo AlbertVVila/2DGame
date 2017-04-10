@@ -13,7 +13,7 @@
 #define FALL_STEP 4
 #define MAX_LIFE 3
 #define CD_STAR	100	
-#define SPEED 2
+#define SPEED 1
 
 enum PlayerAnims
 {
